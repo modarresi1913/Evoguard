@@ -112,7 +112,7 @@ jobs:
         run: bun install --no-save
 
       - name: Build
-        run: bun run build
+        run: bunx next build
         env:
           NEXT_TELEMETRY_DISABLED: "1"
 
