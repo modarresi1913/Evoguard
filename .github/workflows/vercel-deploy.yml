@@ -28,12 +28,33 @@ env:
 
 jobs:
   # ---------------------------------------------------------------------------
+  # Check if Vercel is configured — skip deploy gracefully if not
+  # ---------------------------------------------------------------------------
+  check:
+    name: Check Vercel configuration
+    runs-on: ubuntu-latest
+    outputs:
+      configured: ${{ steps.check.outputs.configured }}
+    steps:
+      - name: Check secrets
+        id: check
+        run: |
+          if [[ -z "${{ secrets.VERCEL_TOKEN }}" || -z "${{ secrets.VERCEL_ORG_ID }}" || -z "${{ secrets.VERCEL_PROJECT_ID }}" ]]; then
+            echo "configured=false" >> $GITHUB_OUTPUT
+            echo "::notice::Vercel secrets not set. Skipping deployment. See DEPLOYMENT.md for setup instructions."
+          else
+            echo "configured=true" >> $GITHUB_OUTPUT
+            echo "::notice::Vercel secrets detected. Proceeding with deployment."
+          fi
+
+  # ---------------------------------------------------------------------------
   # Preview deploy — runs on PR
   # ---------------------------------------------------------------------------
   preview:
     name: Deploy Preview
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
+    needs: check
+    if: github.event_name == 'pull_request' && needs.check.outputs.configured == 'true'
     timeout-minutes: 15
     steps:
       - name: Checkout
@@ -96,7 +117,8 @@ jobs:
   production:
     name: Deploy Production
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: check
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.check.outputs.configured == 'true'
     timeout-minutes: 20
     environment:
       name: production
