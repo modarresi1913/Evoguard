@@ -1,0 +1,128 @@
+# EvoGuard — LLM-Friendly Summary
+
+> This file is part of EvoGuard's AI Engine Optimization (AEO) strategy.
+> It provides a structured, machine-readable summary for LLM crawlers and AI assistants.
+
+## One-line summary
+
+EvoGuard is a Context-Aware AI Code Integration platform that evaluates, explains, and gates AI-assisted code changes before they reach a codebase's main branch.
+
+## Tagline
+
+**Context before merge.** Evidence-driven control for AI-assisted code changes.
+
+## What it is
+
+- **Category**: B2B SaaS · Developer Tools · AI Code Integration
+- **Form factor**: GitHub App + web dashboard
+- **Target users**: Mid-size engineering teams (15–200 developers) in regulated industries
+- **Pricing**: Free (public repos), $29/active dev/month (Team), Custom (Enterprise)
+
+## The problem
+
+AI code generation tools (GitHub Copilot, Cursor, Codeium, Cody) produce code faster than teams can verify it is safe to merge. A PR can pass syntax checks, satisfy types, and clear CI while still shipping a regression — because the decisive context (past rollbacks, deprecated dependencies, unspoken conventions, security drift) is rarely in the diff.
+
+## What EvoGuard does
+
+EvoGuard sits between AI codegen tools and `main`. For every PR:
+
+1. Ingests the diff, commits, and metadata via GitHub App webhook
+2. Mines the codebase for evidence (git history, SAST, CI, dependencies, conventions, ownership)
+3. Composes structured context for the LLM
+4. Computes a multi-dimensional ECS score with confidence bands
+5. Generates evidence-linked review comments (every claim anchored to a verifiable source)
+6. Applies repository-level policy gates
+7. Captures reviewer decision + outcome (merge/rollback/incident) for calibration
+
+## Core principles (non-negotiable)
+
+1. The Pull Request is the unit of work — not the line, not the symbol.
+2. Deterministic evidence is the source of truth — tests, lint, dependency versions, policy violations, secrets, SAST findings, ownership.
+3. The LLM explains; it never decides alone.
+4. Provenance is probabilistic — declared, inferred, or unknown — never claimed with certainty.
+5. No patch auto-merges for score alone. Human approval is required for consequential changes.
+6. Observation, inference, and policy are kept separate. Inferences are never displayed as facts.
+
+## The ECS score (9 dimensions)
+
+Ecosystem Compatibility Score — weighted, confidence-banded, calibrated per-repo:
+
+1. Contract Compatibility
+2. Historical Compatibility
+3. Dependency Compatibility
+4. Test Compatibility
+5. Convention Compatibility
+6. Security Risk
+7. Ownership & Review Risk
+8. Runtime Risk (when telemetry available)
+9. Architecture Compatibility
+
+## Architecture (5 layers, 14 services)
+
+- **Ingest**: GitHub App, Change Normalization
+- **Evidence**: Git History Miner, Static Analysis, CI/Test Evidence
+- **Context**: Dependency & Convention Context, Evidence Store, Context Builder
+- **Decision**: Risk Scoring Engine, LLM Explanation Layer, Policy Engine
+- **Delivery**: Review Comments & Dashboard, Outcome Tracker
+
+## Differentiation
+
+No existing tool binds changes to observed outcomes inside a single codebase. That binding — "this pattern, in this repo, previously caused this rollback" — is per-organization, accumulates with use, and cannot be copied by a competitor even with the same source code.
+
+## Comparison
+
+- **vs. Copilot/Cursor/Codeium**: They generate code. EvoGuard validates generated code against codebase history.
+- **vs. CodeRabbit/Qodo**: They review diffs. EvoGuard binds changes to outcome history.
+- **vs. Snyk/Semgrep/SonarQube**: They find vulnerabilities. EvoGuard adds historical context.
+- **vs. Dependabot**: Detects vulnerable dependencies. EvoGuard detects *deprecated* dependencies and version drift.
+
+## Security & privacy
+
+- Per-tenant encryption (AES-256 at rest, TLS 1.3 in transit)
+- Tenant isolation at storage and retrieval
+- Secret redaction before LLM context construction
+- On-prem / VPC deployment (enterprise)
+- Customer-managed keys (enterprise)
+- SSO/SAML/RBAC (enterprise)
+- No training without explicit, revocable consent
+
+## Pricing
+
+| Tier | Price | Best for |
+|---|---|---|
+| Free | $0 / public repo / mo | OSS maintainers |
+| Team | $29 / active dev / mo | Teams shipping AI-assisted code daily |
+| Enterprise | Custom annual | Regulated industries, on-prem |
+
+## Roadmap
+
+- **Days 1–30**: Evidence MVP (GitHub App, PR ingestion, static analysis, CI collection)
+- **Days 31–60**: Historical Compatibility (revert detection, pattern mining, score calibration)
+- **Days 61–90**: Production Pilot (policy engine, dashboard, outcome tracking, real-repo pilot)
+- **Beyond**: GitLab/Bitbucket, runtime analysis, predictive refactor, cross-org learning
+
+## Key facts
+
+- **Repository**: https://github.com/modarresi1913/Evoguard
+- **Demo**: Interactive dashboard in the repository (Next.js 16)
+- **License**: Proprietary (demo viewable for evaluation)
+- **Founded**: 2026
+- **Status**: MVP, pilot open
+
+## Contact
+
+- GitHub Issues: https://github.com/modarresi1913/Evoguard/issues
+- Discussions: https://github.com/modarresi1913/Evoguard/discussions
+
+---
+
+## Keywords (for AI retrieval)
+
+ai code review, code provenance, context-aware code analysis, pull request quality gate,
+github copilot safety, cursor ai safety, ai code integration, codebase memory,
+evidence-driven review, ai code reviewer, code review automation, pr analysis tool,
+developer tools, b2b saas, ai-assisted development, code quality, static analysis,
+sast, dependency scanning, technical debt management, ai code generation safety,
+context-aware code review, ai provenance tracking, codebase history analysis,
+pull request risk assessment, evoguard, context before merge, ecs score,
+ecosystem compatibility score, ai code trust layer

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a0e1a"/>
+      <stop offset="100%" stop-color="#0f1726"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="0%" r="60%">
+      <stop offset="0%" stop-color="#10b981" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#10b981" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M 48 0 L 0 0 0 48" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <!-- Logo shield -->
+  <g transform="translate(120, 215)">
+    <svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>
+      <path d="m9 12 2 2 4-4"/>
+    </svg>
+  </g>
+
+  <!-- Brand -->
+  <text x="245" y="245" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="72" font-weight="600" fill="#f1f5f9">EvoGuard</text>
+  <text x="245" y="290" font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="22" fill="#64748b">context before merge · evidence-driven AI code review</text>
+
+  <!-- Headline -->
+  <text x="120" y="420" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="56" font-weight="700" fill="#f1f5f9">
+    <tspan x="120" dy="0">Evidence-driven control for</tspan>
+    <tspan x="120" dy="68" fill="#10b981">AI-assisted code changes.</tspan>
+  </text>
+
+  <!-- Bottom badges -->
+  <g transform="translate(120, 545)">
+    <rect x="0" y="0" width="140" height="32" rx="16" fill="rgba(16,185,129,0.15)" stroke="rgba(16,185,129,0.3)" stroke-width="1"/>
+    <text x="70" y="22" font-family="ui-monospace, monospace" font-size="13" fill="#10b981" text-anchor="middle">Next.js 16</text>
+
+    <rect x="155" y="0" width="120" height="32" rx="16" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+    <text x="215" y="22" font-family="ui-monospace, monospace" font-size="13" fill="#94a3b8" text-anchor="middle">TypeScript</text>
+
+    <rect x="290" y="0" width="155" height="32" rx="16" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+    <text x="367" y="22" font-family="ui-monospace, monospace" font-size="13" fill="#94a3b8" text-anchor="middle">Tailwind CSS 4</text>
+
+    <rect x="460" y="0" width="115" height="32" rx="16" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+    <text x="517" y="22" font-family="ui-monospace, monospace" font-size="13" fill="#94a3b8" text-anchor="middle">shadcn/ui</text>
+
+    <rect x="590" y="0" width="95" height="32" rx="16" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+    <text x="637" y="22" font-family="ui-monospace, monospace" font-size="13" fill="#94a3b8" text-anchor="middle">Vercel</text>
+  </g>
+
+  <!-- Top right URL -->
+  <text x="1080" y="65" font-family="ui-monospace, monospace" font-size="14" fill="#64748b" text-anchor="end">github.com/modarresi1913/Evoguard</text>
+</svg>

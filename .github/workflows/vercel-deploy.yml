@@ -1,0 +1,153 @@
+# EvoGuard — Vercel Preview Deployment
+# Deploys a preview environment to Vercel on every PR.
+# Production deploy happens automatically when PR is merged to main.
+
+name: Vercel Deploy
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: vercel-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+  deployments: write
+
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+  VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # Check if Vercel is configured — skip deploy gracefully if not
+  # ---------------------------------------------------------------------------
+  check:
+    name: Check Vercel configuration
+    runs-on: ubuntu-latest
+    outputs:
+      configured: ${{ steps.check.outputs.configured }}
+    steps:
+      - name: Check secrets
+        id: check
+        run: |
+          if [[ -z "${{ secrets.VERCEL_TOKEN }}" || -z "${{ secrets.VERCEL_ORG_ID }}" || -z "${{ secrets.VERCEL_PROJECT_ID }}" ]]; then
+            echo "configured=false" >> $GITHUB_OUTPUT
+            echo "::notice::Vercel secrets not set. Skipping deployment. See DEPLOYMENT.md for setup instructions."
+          else
+            echo "configured=true" >> $GITHUB_OUTPUT
+            echo "::notice::Vercel secrets detected. Proceeding with deployment."
+          fi
+
+  # ---------------------------------------------------------------------------
+  # Preview deploy — runs on PR
+  # ---------------------------------------------------------------------------
+  preview:
+    name: Deploy Preview
+    runs-on: ubuntu-latest
+    needs: check
+    if: github.event_name == 'pull_request' && needs.check.outputs.configured == 'true'
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.1.0"
+
+      - name: Install Vercel CLI
+        run: bun add -g vercel@latest
+
+      - name: Pull Vercel environment
+        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+        continue-on-error: true # OK if no env configured yet
+
+      - name: Build project artifacts
+        run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy preview to Vercel
+        id: deploy
+        run: |
+          DEPLOY_URL=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
+          echo "deploy_url=$DEPLOY_URL" >> $GITHUB_OUTPUT
+          echo "Preview deployed to: $DEPLOY_URL"
+
+      - name: Comment PR with preview URL
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const deployUrl = '${{ steps.deploy.outputs.deploy_url }}';
+            const body = `## 🚀 EvoGuard Preview Deployment\n\nA preview environment has been deployed:\n\n**🔗 [${deployUrl}](${deployUrl})**\n\n---\n_This preview will be automatically deleted when the PR is closed._`;
+            const issueNumber = context.issue.number;
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+            });
+            const existing = comments.find(c => c.body.includes('EvoGuard Preview Deployment'));
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber,
+                body,
+              });
+            }
+
+  # ---------------------------------------------------------------------------
+  # Production deploy — runs on push to main
+  # ---------------------------------------------------------------------------
+  production:
+    name: Deploy Production
+    runs-on: ubuntu-latest
+    needs: check
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.check.outputs.configured == 'true'
+    timeout-minutes: 20
+    environment:
+      name: production
+      url: ${{ steps.deploy.outputs.deploy_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.1.0"
+
+      - name: Install Vercel CLI
+        run: bun add -g vercel@latest
+
+      - name: Pull Vercel environment
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Build project artifacts
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy to Vercel production
+        id: deploy
+        run: |
+          DEPLOY_URL=$(vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }})
+          echo "deploy_url=$DEPLOY_URL" >> $GITHUB_OUTPUT
+          echo "Production deployed to: $DEPLOY_URL"
+
+      - name: Alias to production domain (if configured)
+        run: vercel alias set ${{ steps.deploy.outputs.deploy_url }} evoguard.app --token=${{ secrets.VERCEL_TOKEN }}
+        continue-on-error: true # OK if domain not yet configured

@@ -1,0 +1,34 @@
+{
+  "name": "EvoGuard — Context before merge.",
+  "short_name": "EvoGuard",
+  "description": "Evidence-driven AI code review & provenance tracking. Context-Aware AI Code Integration platform that gates AI-assisted Pull Requests against codebase history, contracts, dependencies & security before merge.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0e1a",
+  "theme_color": "#10b981",
+  "orientation": "portrait-primary",
+  "categories": ["developer", "productivity", "utilities"],
+  "lang": "en-US",
+  "dir": "ltr",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/og-image.png",
+      "sizes": "1200x630",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "EvoGuard dashboard — Risk Overview with ECS score breakdown"
+    }
+  ],
+  "meta": {
+    "keywords": "AI code review, code provenance, context-aware code analysis, pull request quality gate, GitHub App, codebase memory, developer tools, AI code integration, evidence-driven review, merge gate, policy engine, static analysis, SAST, dependency scanning, technical debt, AI-assisted development"
+  }
+}

@@ -1,0 +1,98 @@
+name: 🔒 Security Vulnerability Report
+description: Report a security vulnerability — DO NOT use this for critical active exploits
+title: "[security] "
+labels: ["security", "triage", "pinned"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## ⚠️ Security Vulnerability Report
+
+        Thanks for helping keep EvoGuard secure.
+
+        **If you have found a critical, actively-exploitable vulnerability,**
+        **please do NOT file a public issue.**
+
+        Instead, email **security@evoguard.app** with:
+        - A description of the vulnerability
+        - Steps to reproduce
+        - Affected versions
+        - Any proof-of-concept code (encrypted if sensitive)
+
+        We will acknowledge within 24 hours and provide a coordinated disclosure timeline.
+
+        ---
+
+        For lower-severity issues (defense-in-depth suggestions, hardening ideas, theoretical
+        concerns), please use this template.
+
+  - type: checkboxes
+    id: severity-check
+    attributes:
+      label: Severity self-assessment
+      options:
+        - label: I have reviewed the [working threat model](https://github.com/modarresi1913/Evoguard#-security--privacy) and confirmed this is not already tracked
+          required: true
+        - label: This is NOT a critical / actively-exploitable vulnerability (those go to security@evoguard.app)
+          required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      options:
+        - Low — defense-in-depth suggestion
+        - Medium — exploitable but limited impact
+        - High — exploitable with meaningful impact (consider private disclosure)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Threat category
+      options:
+        - Prompt injection
+        - Cross-tenant leakage
+        - Hallucinated evidence
+        - Provenance forgery
+        - Secret leakage into LLM context
+        - Excessive GitHub App scopes
+        - Insecure generated patch
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Vulnerability description
+      description: Clear description of the issue.
+    validations:
+      required: true
+
+  - type: textarea
+    id: attack-scenario
+    attributes:
+      label: Attack scenario
+      description: |
+        How would an attacker exploit this?
+        What asset is at risk? What is the impact?
+    validations:
+      required: true
+
+  - type: textarea
+    id: mitigation-suggestion
+    attributes:
+      label: Suggested mitigation
+      description: If you have a proposed fix, describe it here.
+
+  - type: textarea
+    id: poc
+    attributes:
+      label: Proof of concept
+      description: |
+        Code or steps demonstrating the vulnerability.
+        If sensitive, leave blank and email to security@evoguard.app.
+      render: shell

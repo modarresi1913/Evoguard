@@ -1,0 +1,124 @@
+name: 🤝 Design Partner Application
+description: Apply to become an EvoGuard design partner — share outcome labels for calibration
+title: "[design partner] "
+labels: ["design-partner", "triage"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🤝 Become an EvoGuard Design Partner
+
+        We are looking for engineering teams who:
+
+        - Use AI code generation tools (Copilot, Cursor, Codeium, Cody) daily
+        - Have a codebase with **3+ years of history** (rollbacks, incidents, deprecated dependencies)
+        - Are willing to **share outcome labels** (merge / rollback / incident) for score calibration
+        - Are in a **regulated industry** (fintech, healthtech, SaaS, enterprise)
+
+        In exchange, design partners receive:
+
+        - ✅ Free Team tier access during the 90-day pilot
+        - ✅ Direct input on the roadmap
+        - ✅ Co-published case study (optional)
+        - ✅ Priority support
+
+        ---
+
+  - type: input
+    id: name
+    attributes:
+      label: Your name
+    validations:
+      required: true
+
+  - type: input
+    id: role
+    attributes:
+      label: Your role
+      placeholder: Engineering Manager, Staff Engineer, CTO, etc.
+    validations:
+      required: true
+
+  - type: input
+    id: company
+    attributes:
+      label: Company / Organization
+    validations:
+      required: true
+
+  - type: input
+    id: email
+    attributes:
+      label: Work email
+    validations:
+      required: true
+
+  - type: input
+    id: team-size
+    attributes:
+      label: Engineering team size
+      placeholder: "e.g. 45 engineers"
+    validations:
+      required: true
+
+  - type: input
+    id: codebase-age
+    attributes:
+      label: Codebase age (years)
+      placeholder: "5"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: industry
+    attributes:
+      label: Industry
+      options:
+        - Fintech / Banking / Insurance
+        - Healthtech / Medtech / Biotech
+        - SaaS / B2B Software
+        - Enterprise / Fortune 500
+        - Government / Public sector
+        - Crypto / Web3
+        - E-commerce / Consumer
+        - Other
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: tools
+    attributes:
+      label: Which AI code generation tools does your team use?
+      options:
+        - label: GitHub Copilot
+        - label: Cursor
+        - label: Codeium
+        - label: Sourcegraph Cody
+        - label: Continue.dev
+        - label: Other (specify in additional context)
+
+  - type: checkboxes
+    id: willingness
+    attributes:
+      label: Commitment
+      options:
+        - label: We are willing to share outcome labels (merge/rollback/incident) for score calibration
+          required: true
+        - label: We can dedicate 2-4 hours / week during the pilot to feedback sessions
+          required: true
+        - label: We are open to a co-published case study after the pilot
+          required: false
+
+  - type: textarea
+    id: pain
+    attributes:
+      label: What is your biggest pain with AI-assisted code today?
+      placeholder: We had three rollbacks last quarter caused by AI-generated PRs that bypassed our internal HTTP wrapper convention...
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Anything else we should know?

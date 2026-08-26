@@ -1,0 +1,68 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# local env files
+.env
+.env*.local
+.env.development
+.env.production
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# logs
+dev.log
+server.log
+*.log
+
+# prisma
+/prisma/migrations/dev.db*
+
+# local sqlite databases
+/db/*.db
+/db/*.db-journal
+
+# runtime dev tooling (not part of EvoGuard deliverable)
+/.zscripts/
+/skills/
+
+# tool-results (transient)
+/tool-results/
+
+# upload (transient user uploads)
+/upload/
+
+# template artifacts (not part of EvoGuard)
+/examples/
+/mini-services/
+/Caddyfile
+/prisma/schema.prisma
+/public/logo.svg
+/tests/

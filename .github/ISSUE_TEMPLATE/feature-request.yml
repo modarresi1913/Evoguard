@@ -1,0 +1,85 @@
+name: ✨ Feature Request
+description: Suggest a new capability, section, or improvement for EvoGuard
+title: "[feature] "
+labels: ["enhancement", "triage"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a feature for EvoGuard! ✨
+        The more concrete you can be, the easier it is for us to evaluate.
+
+  - type: checkboxes
+    id: search-first
+    attributes:
+      label: Preflight checklist
+      options:
+        - label: I have searched the existing issues and discussions to make sure this is not a duplicate
+          required: true
+        - label: This feature aligns with EvoGuard's [core principles](https://github.com/modarresi1913/Evoguard#-core-principles)
+          required: false
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Affected area
+      options:
+        - Landing page / marketing
+        - Dashboard UI
+        - Score model (ECS)
+        - Architecture
+        - Security / Privacy
+        - Documentation
+        - Developer experience (DX)
+        - CI / Deployment
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: What is currently hard or impossible to do?
+      placeholder: I want to filter the evidence list by severity, but the current filter only supports type...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: What would success look like? Be as concrete as possible.
+      placeholder: Add a severity dropdown next to the type filter...
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: What other ways have you considered to solve this?
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      options:
+        - Low — nice to have
+        - Medium — would meaningfully improve experience
+        - High — blocking real work
+    validations:
+      required: true
+
+  - type: textarea
+    id: mockup
+    attributes:
+      label: Mockup / Screenshot / Code sample
+      description: |
+        If you have a visual mockup, screenshot, or code snippet showing the desired behavior, attach it here.
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context
