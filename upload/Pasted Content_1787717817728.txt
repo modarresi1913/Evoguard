@@ -1,0 +1,1341 @@
+در ادامه نسخهٔ کامل و نهایی پرامپت را می‌بینی. نام **Behave to One: AI Edition** کاملاً حذف شده و نام محصول فقط **EvoGuard** است.
+
+```text
+نقش تو:
+
+تو یک استراتژیست محصول در سطح جهانی، معمار نرم‌افزار، پژوهشگر مهندسی نرم‌افزار، متخصص AI-assisted software engineering و مشاور طراحی محصولات B2B SaaS هستی.
+
+در حوزه‌های زیر تخصص داری:
+
+- تولید و اصلاح کد با هوش مصنوعی
+- ارزیابی کیفیت، امنیت و maintainability کد
+- مهندسی نرم‌افزار تجربی
+- تحلیل تاریخچهٔ Git
+- تحلیل Pull Request و CI/CD
+- مدیریت technical debt
+- ردیابی منشأ تغییرات و provenance
+- طراحی سیستم‌های قابل‌توضیح و evidence-driven
+- تحلیل dependency و software supply chain
+- طراحی سیاست‌های merge و code review
+- طراحی محصولات enterprise
+- زیست‌شناسی رفتار و مفهوم فشارهای محیطی
+- استراتژی رقابتی و category creation
+- تحلیل بازار و اعتبارسنجی محصول
+
+مأموریت:
+
+یک محصول نرم‌افزاری B2B SaaS به نام «EvoGuard» طراحی کن.
+
+EvoGuard یک پلتفرم «Context-Aware AI Code Integration» است که تغییرات تولیدشده، اصلاح‌شده یا پیشنهادشده توسط هوش مصنوعی را پیش از merge شدن به codebaseهای موجود ارزیابی، توضیح و کنترل می‌کند.
+
+شعار اصلی محصول:
+
+Context before merge.
+
+توصیف کوتاه محصول:
+
+Evidence-driven control for AI-assisted code changes.
+
+تعریف یک‌جمله‌ای محصول:
+
+EvoGuard به تیم‌های مهندسی کمک می‌کند تغییرات AI-assisted را پیش از merge، با تاریخچه، قراردادها، وابستگی‌ها، تست‌ها، محدودیت‌های امنیتی و رفتار واقعی codebase مقایسه کنند.
+
+────────────────────────
+۱. زمینه و مسئله
+────────────────────────
+
+در عصر ابزارهای تولید کد با هوش مصنوعی، مشکل اصلی دیگر صرفاً تولید کد نیست.
+
+مشکل اصلی این است که کد تولیدشده یا اصلاح‌شده توسط AI معمولاً از تاریخچه و فشارهای پنهان codebase آگاهی ندارد.
+
+این فشارها ممکن است شامل موارد زیر باشند:
+
+- incidentهای گذشته
+- revert و rollbackهای قبلی
+- dependencyهای deprecated
+- wrapperهای داخلی
+- قراردادهای معماری
+- conventionهای نانوشتهٔ تیم
+- محدودیت‌های تست
+- شکست‌های CI
+- رفتارهای حساس runtime
+- نیازهای مشتریان قدیمی
+- تصمیم‌های معماری ثبت‌شده در ADR
+- تصمیم‌های معماری ثبت‌نشده
+- محدودیت‌های امنیتی و compliance
+- الگوهایی که در گذشته به technical debt یا outage منجر شده‌اند
+
+یک قطعه کد ممکن است از نظر syntax و type درست باشد، اما همچنان با ecosystem پروژه ناسازگار باشد.
+
+بنابراین EvoGuard باید پیش از merge شدن هر Pull Request مشخص کند:
+
+1. این تغییر با کدام بخش‌های codebase سازگار یا ناسازگار است؟
+2. کدام شواهد تاریخی یا فنی از این ارزیابی پشتیبانی می‌کنند؟
+3. آیا الگوی مشابهی در گذشته به defect، incident، rollback یا revert منجر شده است؟
+4. چه تست، approval، refactor یا بررسی امنیتی بیشتری لازم است؟
+5. کدام قراردادها یا constraintهای پروژه در این تغییر رعایت نشده‌اند؟
+6. آیا پیشنهاد اصلاحی وجود دارد؟
+7. میزان اطمینان سیستم به هر نتیجه چقدر است؟
+
+اصل اساسی:
+
+EvoGuard نباید فقط وضعیت فعلی کد را بررسی کند؛ باید تاریخچه، زمینه و پیامدهای تغییر را نیز تحلیل کند.
+
+────────────────────────
+۲. جایگاه محصول
+────────────────────────
+
+EvoGuard نباید خود را به‌عنوان ابزار عمومی تولید کد معرفی کند.
+
+EvoGuard همچنین نباید صرفاً یک AI code reviewer عمومی یا یک ابزار SAST دیگر باشد.
+
+جایگاه دقیق محصول:
+
+EvoGuard یک لایهٔ کنترل زمینه‌محور برای ادغام تغییرات AI-assisted در codebaseهای پیچیده است.
+
+دستهٔ محصول:
+
+Context-Aware AI Code Integration
+
+مفاهیم کلیدی محصول:
+
+- AI Code Integration
+- AI Code Provenance
+- Context-Aware Change Risk
+- Historical Compatibility
+- Codebase Memory
+- Evidence-Driven Review
+- Change Compatibility
+- Contextual Repair Loop
+- Outcome-Based Engineering Memory
+
+برای هر مفهوم، تعریف فنی و تجاری جداگانه ارائه کن.
+
+از استعاره‌های تکاملی، رفتار و اکوسیستم فقط برای branding و توضیح مفاهیم استفاده کن؛ اما معماری، featureها و KPIها را با زبان روشن مهندسی نرم‌افزار تعریف کن.
+
+────────────────────────
+۳. ارزیابی انتقادی ایده
+────────────────────────
+
+ابتدا ایدهٔ EvoGuard را به‌صورت انتقادی بررسی کن.
+
+این موارد را تحلیل کن:
+
+1. آیا مسئله واقعاً دردناک و قابل‌پرداخت است؟
+2. چه نوع سازمان‌هایی بیشترین درد را دارند؟
+3. آیا این مسئله به‌اندازهٔ کافی فوری است؟
+4. آیا بازار هدف برای ساخت یک کسب‌وکار مستقل کافی است؟
+5. کدام بخش ایده differentiated است؟
+6. کدام بخش صرفاً استعاره یا feature تزئینی است؟
+7. چه ابزارهای موجود با EvoGuard هم‌پوشانی دارند؟
+8. چرا GitHub Copilot، Cursor، CodeRabbit، Qodo، Snyk، SonarQube، Semgrep یا ابزارهای مشابه به‌تنهایی این مسئله را حل نمی‌کنند؟
+9. آیا AI Code Integration یک category قابل‌دفاع است؟
+10. آیا این مفهوم برای CTO و مدیر مهندسی قابل‌فهم و قابل‌خرید است؟
+11. مهم‌ترین فرض‌های قابل‌ابطال چیست؟
+12. چه چیزی ممکن است باعث شکست محصول شود؟
+13. آیا مشتری حاضر است برای این محصول پول پرداخت کند؟
+14. چه زمانی EvoGuard باید pivot کند؟
+15. بهترین wedge اولیه برای ورود به بازار چیست؟
+
+خروجی را در این جدول ارائه کن:
+
+| فرض | اهمیت | احتمال نادرست‌بودن | روش اعتبارسنجی | معیار موفقیت | اقدام در صورت شکست |
+|---|---:|---:|---|---|---|
+
+حداقل ۱۰ فرض کلیدی استخراج کن.
+
+سپس یک تحلیل صریح ارائه کن:
+
+- چرا این محصول ممکن است شکست بخورد؟
+- چرا با وجود این ریسک‌ها ارزش ساختن دارد؟
+- کدام feature باید حذف شود؟
+- کدام feature بیشترین ارزش اولیه را دارد؟
+- چه چیزی باید در ۹۰ روز اول اثبات شود؟
+
+────────────────────────
+۴. بازار هدف و Beachhead Market
+────────────────────────
+
+پرسوناهای مختلف بازار را بررسی کن:
+
+- استارتاپ‌های کوچک
+- شرکت‌های متوسط
+- شرکت‌های enterprise
+- تیم‌های دارای codebase قدیمی
+- تیم‌های پلتفرم و زیرساخت
+- شرکت‌های فین‌تک
+- شرکت‌های سلامت و درمان
+- شرکت‌های SaaS
+- شرکت‌های با الزامات compliance
+- شرکت‌های دارای تیم‌های distributed
+
+سپس یک beachhead market دقیق انتخاب کن.
+
+برای beachhead market انتخاب‌شده مشخص کن:
+
+- اندازهٔ تقریبی تیم
+- نوع codebase
+- ابزارهای فعلی
+- trigger خرید
+- درد اصلی
+- بودجهٔ احتمالی
+- چرخهٔ فروش
+- decision maker
+- کاربر روزانه
+- design partner ایده‌آل
+- دلیل مناسب‌بودن برای MVP
+
+توضیح بده چرا تیم‌های بسیار کوچک و enterpriseهای بسیار بزرگ برای اولین بازار مناسب نیستند.
+
+────────────────────────
+۵. تعریف MVP
+────────────────────────
+
+یک MVP واقعاً قابل‌ساخت برای EvoGuard طراحی کن.
+
+واحد اصلی محصول باید Pull Request یا Change Set باشد، نه خط یا بلوک کد.
+
+MVP باید حداقل قابلیت‌های زیر را داشته باشد:
+
+1. GitHub App یا GitHub Integration.
+2. دریافت Pull Request، diff، commit و metadata.
+3. تحلیل فایل‌ها و symbolهای تغییرکرده.
+4. اجرای static analysis.
+5. تحلیل dependency graph.
+6. بررسی API و contract compatibility.
+7. دریافت نتایج CI، lint و test.
+8. تحلیل revert، rollback و bug-fixهای مرتبط.
+9. شناسایی الگوهای تاریخی پرریسک.
+10. شناسایی conventionهای موجود در repository.
+11. تولید Change Risk Assessment.
+12. تولید evidence-linked review comments.
+13. نمایش score breakdown.
+14. ثبت تصمیم reviewer.
+15. ذخیرهٔ outcome برای ارزیابی آینده.
+16. اجرای policyهای merge در سطح repository یا team.
+17. ثبت provenance احتمالی تغییرات AI-assisted.
+
+برای هر قابلیت مشخص کن:
+
+- چرا در MVP قرار دارد؟
+- ارزش کاربر چیست؟
+- پیچیدگی پیاده‌سازی چیست؟
+- وابستگی فنی چیست؟
+- خروجی مورد انتظار چیست؟
+- معیار پذیرش چیست؟
+- ریسک آن چیست؟
+
+موارد زیر را عمداً از MVP حذف یا به فاز بعد منتقل کن:
+
+- تشخیص قطعی کد AI-generated
+- تحلیل کامل runtime behavior
+- اتصال هم‌زمان به GitHub، GitLab و Bitbucket
+- predictive refactor
+- merge خودکار
+- cross-organization learning
+- network effect عمومی
+- visualization پیچیده شبیه Gource
+- mutation خودکار کد
+- آموزش مدل اختصاصی بزرگ
+- تحلیل کامل incident management
+- پشتیبانی اولیه از همهٔ زبان‌های برنامه‌نویسی
+
+برای هر مورد حذف‌شده توضیح بده:
+
+- چرا اکنون ساخته نمی‌شود؟
+- چه زمانی باید اضافه شود؟
+- پیش‌نیاز اضافه‌شدن آن چیست؟
+
+────────────────────────
+۶. کاربران و پرسوناها
+────────────────────────
+
+پرسوناهای اصلی را تعریف کن:
+
+1. Developer
+2. Staff Engineer
+3. Engineering Manager
+4. Security Engineer
+5. Platform یا DevOps Engineer
+6. Enterprise Architect
+7. CTO
+
+برای هر پرسونا ارائه کن:
+
+- هدف
+- درد اصلی
+- نگرانی
+- تصمیمی که با EvoGuard می‌گیرد
+- KPI مورد علاقه
+- دلیل استفاده
+- دلیل مقاومت
+- دلیل خرید
+- objection اصلی
+- پاسخ پیشنهادی محصول
+
+سپس حداقل ۱۵ user story بنویس.
+
+قالب هر user story:
+
+به‌عنوان [نوع کاربر]،
+می‌خواهم [هدف]،
+تا بتوانم [ارزش].
+
+برای هر user story موارد زیر را نیز بنویس:
+
+- acceptance criteria
+- priority: P0 / P1 / P2
+- دادهٔ موردنیاز
+- dependency فنی
+- ریسک احتمالی
+- روش اندازه‌گیری موفقیت
+
+────────────────────────
+۷. معماری فنی
+────────────────────────
+
+یک معماری production-oriented برای EvoGuard طراحی کن.
+
+معماری باید شامل اجزای زیر باشد:
+
+1. GitHub App یا Integration Layer
+2. Webhook Ingestion Service
+3. Authentication و Authorization Service
+4. Change Normalization Pipeline
+5. Repository Snapshot Service
+6. Git History Miner
+7. Dependency Graph Builder
+8. Static Analysis Orchestrator
+9. Test و CI Evidence Collector
+10. Convention Miner
+11. Historical Event Detector
+12. Provenance Service
+13. Evidence Store
+14. Context Builder
+15. Risk Scoring Engine
+16. Policy Engine
+17. LLM Explanation Layer
+18. Review Comment Publisher
+19. Feedback و Outcome Tracker
+20. Dashboard API
+21. Audit و Privacy Layer
+22. Notification Service
+23. Evaluation و Calibration Service
+
+یک نمودار ASCII ارائه کن که مسیر داده را از Pull Request تا گزارش نهایی نشان دهد.
+
+نمودار باید حداقل چنین جریانی را نشان دهد:
+
+```text
+Pull Request
+     |
+     v
+Integration Layer
+     |
+     v
+Change Normalization
+     |
+     +------------------+
+     |                  |
+     v                  v
+Git History        Static Analysis
+     |                  |
+     v                  v
+Historical Events  CI/Test Evidence
+     |                  |
+     +--------+---------+
+              |
+              v
+Dependency and Convention Context
+              |
+              v
+Evidence Store
+              |
+              v
+Context Builder
+              |
+              v
+Risk Scoring Engine
+              |
+              v
+LLM Explanation Layer
+              |
+              v
+Policy Engine
+              |
+              v
+GitHub Review Comments and Dashboard
+              |
+              v
+Reviewer Decision and Outcome
+```
+
+مسیر داده را مرحله‌به‌مرحله توضیح بده.
+
+اصل معماری:
+
+LLM نباید منبع حقیقت باشد.
+
+LLM فقط باید:
+
+- evidenceهای ساختاریافته را توضیح دهد
+- ریسک‌ها را به زبان انسانی تبدیل کند
+- فرض‌ها را فهرست کند
+- review comment پیشنهادی تولید کند
+- rewrite prompt یا patch پیشنهادی ارائه کند
+
+منبع حقیقت برای موارد زیر باید تا حد امکان deterministic یا evidence-based باشد:
+
+- نتیجهٔ تست
+- lint violation
+- dependency version
+- policy violation
+- secret detection
+- SAST finding
+- commit و PR history
+- ownership
+- approval status
+
+معماری را از نظر موارد زیر تحلیل کن:
+
+- مقیاس‌پذیری
+- latency
+- صف پردازش
+- caching
+- multi-tenancy
+- tenant isolation
+- امنیت
+- مدیریت secret
+- auditability
+- هزینهٔ inference
+- fail-open و fail-closed behavior
+- دسترسی به کد خصوصی
+- حذف داده
+- data retention
+- on-premise deployment
+- disaster recovery
+- observability
+- rate limiting
+
+────────────────────────
+۸. مدل چندبعدی Change Compatibility Score
+────────────────────────
+
+به‌جای یک امتیاز مبهم، یک مدل چندبعدی و قابل‌توضیح طراحی کن.
+
+نام امتیاز را انتخاب کن:
+
+- ECS: Ecosystem Compatibility Score
+- CCRS: Contextual Change Risk Score
+- یا یک نام بهتر
+
+نام انتخاب‌شده را با دلیل توضیح بده.
+
+امتیاز باید حداقل این ابعاد را داشته باشد:
+
+1. Contract Compatibility
+2. Historical Compatibility
+3. Dependency Compatibility
+4. Test Compatibility
+5. Convention Compatibility
+6. Security Risk
+7. Runtime Risk، در صورت وجود داده
+8. Ownership and Review Risk
+9. Architecture Compatibility
+
+برای هر بُعد مشخص کن:
+
+- تعریف
+- ورودی‌ها
+- الگوریتم محاسبه
+- نوع evidence
+- confidence
+- severity
+- false positiveهای محتمل
+- false negativeهای محتمل
+- روش اعتبارسنجی
+- اقدام پیشنهادی
+
+خروجی باید شامل score کلی و breakdown باشد.
+
+نمونه:
+
+```text
+Overall compatibility: 74/100
+Confidence: 0.86
+
+Contract compatibility: 91/100
+Historical compatibility: 62/100
+Dependency compatibility: 58/100
+Test compatibility: 83/100
+Convention compatibility: 79/100
+Security risk: Low
+Ownership risk: Medium
+
+Recommendation:
+Review required
+
+Top evidence:
+- الگوی مشابه در دو Pull Request قبلی به rollback منجر شده است.
+- API استفاده‌شده deprecated است.
+- regression test برای timeout وجود ندارد.
+- فایل تغییرکرده مالک مشخصی دارد اما owner review دریافت نکرده است.
+```
+
+یک فرمول اولیه ارائه کن، اما به‌صراحت بنویس که وزن‌ها باید با دادهٔ واقعی calibrate شوند.
+
+مثلاً:
+
+```text
+Compatibility Score =
+w1 * Contract Compatibility
++ w2 * Historical Compatibility
++ w3 * Dependency Compatibility
++ w4 * Test Compatibility
++ w5 * Convention Compatibility
++ w6 * Architecture Compatibility
+- w7 * Security Risk
+- w8 * Ownership Risk
+```
+
+توضیح بده چرا score نمی‌تواند تنها معیار merge باشد.
+
+برای scoreهای مختلف policy پیشنهاد کن:
+
+- ۹۰ تا ۱۰۰: low-friction merge
+- ۷۰ تا ۸۹: merge با review عادی
+- ۵۰ تا ۶۹: review اجباری یا تست تکمیلی
+- کمتر از ۵۰: block یا approval ویژه
+
+تأکید کن که این thresholdها جهانی و قطعی نیستند و باید با baseline هر repository و دادهٔ واقعی تنظیم شوند.
+
+────────────────────────
+۹. Historical Compatibility و Codebase Memory
+────────────────────────
+
+توضیح بده EvoGuard چگونه از منابع زیر evidence استخراج می‌کند:
+
+- Git commit history
+- revert و rollback
+- Pull Request discussion
+- issues
+- incident و postmortem
+- ADR
+- CODEOWNERS
+- CI failure
+- test history
+- dependency migration
+- changelog
+- release notes
+
+برای MVP فقط منابع ضروری را انتخاب کن.
+
+برای هر منبع توضیح بده:
+
+- ارزش آن چیست؟
+- reliability آن چقدر است؟
+- چه نوع evidence تولید می‌کند؟
+- false inference محتمل چیست؟
+- آیا در MVP است یا بعداً اضافه می‌شود؟
+
+برای Historical Event این schema را ارائه کن:
+
+```text
+HistoricalEvent
+- id
+- repository_id
+- event_type
+- affected_files
+- affected_symbols
+- pattern_signature
+- failure_mode
+- outcome
+- severity
+- evidence_refs
+- valid_from
+- valid_until
+- confidence
+- created_at
+- updated_at
+```
+
+توضیح بده چگونه سیستم از یک رویداد تاریخی، constraint قابل‌استفاده برای PR جدید می‌سازد؛ بدون اینکه علت را بیش از اندازه از داده‌ها استنباط کند.
+
+بین این سه سطح تفاوت روشن بگذار:
+
+1. Observation
+2. Inference
+3. Policy
+
+مثال:
+
+```text
+Observation:
+این الگو در دو commit بعداً revert شده است.
+
+Inference:
+این الگو احتمالاً در این codebase پرریسک است.
+
+Policy:
+استفاده از این الگو نیازمند approval مالک سرویس است.
+```
+
+سیستم نباید inference را به‌عنوان fact قطعی نمایش دهد.
+
+────────────────────────
+۱۰. Provenance و منشأ تغییرات
+────────────────────────
+
+یک مدل واقع‌بینانه برای provenance طراحی کن.
+
+EvoGuard نباید ادعا کند که می‌تواند با قطعیت تشخیص دهد کدام خط توسط AI تولید شده است.
+
+سیستم باید این حالت‌ها را ثبت کند:
+
+- کد مستقیماً از یک ابزار AI اعلام‌شده آمده است.
+- کد با AI اصلاح یا refactor شده است.
+- کد از چند منبع ترکیبی آمده است.
+- کد به‌صورت احتمالی AI-assisted است.
+- منشأ کد نامشخص است.
+
+سطوح provenance:
+
+- declared
+- inferred
+- unknown
+
+هر provenance باید confidence بین ۰ و ۱ داشته باشد.
+
+schema زیر را تکمیل کن:
+
+```text
+ProvenanceRecord
+- id
+- change_id
+- source_type
+- provider
+- model_name
+- model_version
+- generation_timestamp
+- context_hash
+- declared_by
+- inference_method
+- confidence
+- evidence_refs
+- privacy_level
+- retention_policy
+- created_at
+```
+
+توضیح بده:
+
+- چه اطلاعاتی ذخیره می‌شود؟
+- چه اطلاعاتی ذخیره نمی‌شود؟
+- آیا prompt خام ذخیره می‌شود؟
+- چگونه promptهای حساس محافظت می‌شوند؟
+- چگونه secretها redaction می‌شوند؟
+- چه زمانی provenance حذف یا anonymize می‌شود؟
+- آیا دادهٔ provenance برای training استفاده می‌شود؟
+- چه رضایتی برای training لازم است؟
+- چگونه provenance در audit استفاده می‌شود؟
+
+────────────────────────
+۱۱. Contextual Repair Loop
+────────────────────────
+
+بخش Adaptive Mutation را به یک فرایند امن به نام Contextual Repair Loop تبدیل کن.
+
+این فرایند باید شامل مراحل زیر باشد:
+
+1. شناسایی مشکل
+2. جمع‌آوری evidence
+3. تعیین constraint
+4. توضیح زمینه برای developer
+5. تولید rewrite prompt یا patch پیشنهادی
+6. اجرای static analysis
+7. اجرای test و CI
+8. مقایسهٔ قبل و بعد
+9. بررسی اثرات جانبی
+10. human review
+11. ثبت تصمیم
+12. ثبت outcome
+13. rollback در صورت شکست
+
+هیچ patchی نباید فقط به‌دلیل افزایش score به‌صورت خودکار merge شود.
+
+برای این بخش مشخص کن:
+
+- prompt template
+- guardrail
+- validation pipeline
+- test strategy
+- rollback strategy
+- human approval
+- معیار موفقیت
+- failure modeها
+- حدود اختیار مدل
+- فایل‌هایی که مدل مجاز به تغییر آن‌ها نیست
+
+نمونهٔ rewrite prompt تولید کن:
+
+```text
+Rewrite this change while preserving its public behavior.
+
+Repository constraints:
+- Use the internal HTTP wrapper defined in [path].
+- Do not use pattern [X] because it was associated with [evidence].
+- Preserve compatibility with [API/version/client].
+- Add a regression test for [behavior].
+- Follow the convention used in [reference files].
+- Do not modify files outside [allowed scope].
+- Do not remove existing security checks.
+- Do not change public interfaces unless explicitly approved.
+
+Evidence:
+- Pull Request: [reference]
+- Commit: [reference]
+- Incident: [reference]
+- Dependency constraint: [reference]
+- Test failure: [reference]
+
+Return:
+1. proposed patch
+2. assumptions
+3. files changed
+4. tests added or required
+5. compatibility risks
+6. unresolved risks
+7. explanation of why the patch fits this repository
+```
+
+────────────────────────
+۱۲. Data Model
+────────────────────────
+
+یک data model کامل برای EvoGuard ارائه کن.
+
+Entityهای حداقل:
+
+- Organization
+- User
+- Repository
+- RepositorySnapshot
+- PullRequest
+- Commit
+- ChangeSet
+- FileChange
+- Symbol
+- ProvenanceRecord
+- Dependency
+- DependencyVersion
+- Constraint
+- HistoricalEvent
+- Evidence
+- Assessment
+- ScoreDimension
+- ReviewDecision
+- Policy
+- Outcome
+- IncidentLink
+- TestResult
+- CIResult
+- OwnershipRule
+- AuditEvent
+- Notification
+
+برای هر entity مشخص کن:
+
+- فیلدها
+- نوع داده
+- primary key
+- foreign key
+- index
+- access control
+- retention policy
+- sensitivity level
+
+relationshipها را با ERD متنی نمایش بده.
+
+نمونه:
+
+```text
+Organization 1---N Repository
+Repository 1---N PullRequest
+PullRequest 1---1 ChangeSet
+ChangeSet 1---N FileChange
+ChangeSet 1---N Evidence
+ChangeSet 1---1 Assessment
+Assessment 1---N ScoreDimension
+Assessment 1---N ReviewDecision
+Assessment 1---N Outcome
+Repository 1---N HistoricalEvent
+HistoricalEvent 1---N Constraint
+ChangeSet 1---N ProvenanceRecord
+```
+
+────────────────────────
+۱۳. Dashboard و تجربهٔ کاربری
+────────────────────────
+
+صفحه‌های اصلی محصول را طراحی کن:
+
+1. PR Risk Overview
+2. Evidence Explorer
+3. Historical Pattern View
+4. Dependency Risk View
+5. Policy and Constraints
+6. Codebase Memory
+7. Review Outcomes
+8. Evolutionary Analytics
+9. Repository Health
+10. Administration and Privacy
+
+برای هر صفحه مشخص کن:
+
+- کاربر هدف
+- سؤال اصلی کاربر
+- داده‌های نمایش‌داده‌شده
+- action اصلی
+- هشدارهای احتمالی
+- معیار usability
+- زمان موردنیاز برای درک صفحه
+- خطر overload اطلاعاتی
+
+داشبورد را بیش از حد استعاری نکن.
+
+هر visualization باید یک تصمیم مشخص را پشتیبانی کند.
+
+به‌جای نمایش صرفاً جذاب، بر این موارد تمرکز کن:
+
+- چرا این تغییر پرریسک است؟
+- evidence چیست؟
+- چه کاری باید انجام شود؟
+- چه کسی باید review کند؟
+- آیا این هشدار درست بوده است؟
+- آیا outcome تغییر را تأیید یا رد کرده است؟
+
+────────────────────────
+۱۴. امنیت و حریم خصوصی
+────────────────────────
+
+Threat model کاملی برای EvoGuard ارائه کن.
+
+تهدیدهای زیر را بررسی کن:
+
+- دسترسی به کد خصوصی
+- prompt injection در کد یا issue
+- data exfiltration
+- cross-tenant leakage
+- malicious Pull Request
+- poisoned repository history
+- dependency confusion
+- hallucinated evidence
+- insecure generated patch
+- مدل یا provider ثالث
+- نگهداری prompt و diff
+- insider threat
+- سرقت token
+- دسترسی بیش از حد GitHub App
+- نشت اطلاعات از log
+- ذخیرهٔ ناامن embedding
+- سوءاستفاده از review bot
+- جعل provenance
+- دستکاری outcome
+- حمله به webhook
+
+برای هر تهدید این موارد را بنویس:
+
+- attack scenario
+- asset
+- impact
+- likelihood
+- mitigation
+- residual risk
+- detection method
+- owner
+
+سیاست‌های زیر را پیشنهاد کن:
+
+- least privilege
+- encryption in transit
+- encryption at rest
+- tenant isolation
+- secret redaction
+- audit log
+- retention policy
+- deletion policy
+- on-premise option
+- LLM provider policy
+- عدم استفاده از دادهٔ مشتری برای training بدون رضایت صریح
+- data residency
+- customer-managed keys
+- SSO/SAML
+- RBAC
+- approval workflow
+- incident response
+
+────────────────────────
+۱۵. معیارهای موفقیت و آزمایش
+────────────────────────
+
+معیارهای محصول را به سه گروه تقسیم کن.
+
+الف) Adoption Metrics:
+
+- درصد PRهایی که analysis روی آن‌ها اجرا می‌شود
+- تعداد repository فعال
+- نرخ بازگشت کاربران
+- زمان مشاهدهٔ گزارش
+- استفاده از evidence explorer
+- تعداد review commentهای پذیرفته‌شده
+- درصد policyهای فعال
+- درصد developerهای فعال هفتگی
+
+ب) Quality Metrics:
+
+- precision هشدارها
+- recall در defectهای شناخته‌شده
+- false positive rate
+- reviewer acceptance rate
+- reviewer dismissal rate
+- defect detection rate
+- rollback prevention
+- calibration score
+- coverage تحلیل
+- latency
+- failure rate pipeline
+- درصد claimهای دارای evidence
+- درصد hallucinated evidence
+
+ج) Business Metrics:
+
+- conversion
+- retention
+- expansion
+- کاهش زمان review
+- کاهش incidentهای مرتبط با change
+- کاهش rollback
+- willingness to pay
+- هزینهٔ analysis به‌ازای PR
+- gross margin
+- time to value
+
+یک طراحی آزمایش ۹۰روزه ارائه کن که شامل این موارد باشد:
+
+- baseline
+- گروه آزمایشی
+- گروه کنترل در صورت امکان
+- تعداد repository
+- مدت آزمایش
+- متغیرهای اصلی
+- معیار موفقیت
+- معیار توقف
+- خطرهای تفسیر نادرست
+- روش کنترل bias
+- روش جمع‌آوری feedback
+
+از ادعاهای بزرگ مانند «کاهش technical debt» بدون تعریف عملیاتی و دورهٔ اندازه‌گیری استفاده نکن.
+
+────────────────────────
+۱۶. Roadmap نودروزه
+────────────────────────
+
+یک roadmap دقیق ۹۰روزه برای EvoGuard طراحی کن.
+
+Roadmap را به سه فاز تقسیم کن.
+
+فاز اول: روزهای ۱ تا ۳۰ — Evidence MVP
+
+قابلیت‌ها:
+
+- GitHub App
+- PR ingestion
+- diff و commit analysis
+- static analysis
+- CI result collection
+- test result collection
+- dependency extraction اولیه
+- گزارش اولیه
+- privacy baseline
+- audit log پایه
+
+فاز دوم: روزهای ۳۱ تا ۶۰ — Historical Compatibility
+
+قابلیت‌ها:
+
+- revert detection
+- rollback detection
+- historical pattern mining
+- dependency compatibility
+- evidence-linked review comments
+- convention extraction
+- feedback capture
+- score calibration اولیه
+
+فاز سوم: روزهای ۶۱ تا ۹۰ — Production Pilot
+
+قابلیت‌ها:
+
+- policy engine
+- dashboard
+- outcome tracking
+- pilot با چند repository واقعی
+- usability testing
+- reliability improvement
+- cost optimization
+- security hardening
+- case study اولیه
+- go/no-go decision
+
+برای هر هفته مشخص کن:
+
+- هدف
+- deliverable
+- owner
+- وابستگی
+- ریسک
+- معیار پذیرش
+- featureهای خارج از محدوده
+- خروجی قابل‌نمایش برای design partner
+
+سپس featureها را با RICE یا WSJF اولویت‌بندی کن.
+
+محاسبه را نیز نشان بده:
+
+```text
+RICE = Reach × Impact × Confidence / Effort
+```
+
+فرض‌های Reach، Impact، Confidence و Effort را برای هر feature توضیح بده.
+
+────────────────────────
+۱۷. Pitch Deck پنج‌اسلایدی
+────────────────────────
+
+یک pitch deck پنج‌اسلایدی با زبان استراتژیک Peter Thiel طراحی کن.
+
+اسلایدها:
+
+1. Problem
+2. Secret
+3. Product
+4. Monopoly
+5. Last Mover Advantage
+
+اسلاید اول: Problem
+
+موضوع:
+
+AI سرعت تولید کد را بالا برده، اما codebaseها را سریع‌تر از ظرفیت فهم انسان تغییر می‌دهد.
+
+توضیح بده:
+
+- چرا تولید کد دیگر گلوگاه اصلی نیست؟
+- چرا code review عمومی کافی نیست؟
+- چرا context پنهان codebase ارزش اقتصادی دارد؟
+
+اسلاید دوم: Secret
+
+موضوع:
+
+هر codebase فشارهای تاریخی دارد که در وضعیت فعلی کد دیده نمی‌شوند.
+
+توضیح بده:
+
+- چگونه incident، revert، dependency و convention رفتار codebase را شکل می‌دهند؟
+- چرا این اطلاعات در ابزارهای عمومی دیده نمی‌شوند؟
+- چرا حافظهٔ codebase ارزشمند است؟
+
+اسلاید سوم: Product
+
+موضوع:
+
+EvoGuard لایهٔ evidence-driven برای ادغام تغییرات AI-assisted است.
+
+توضیح بده:
+
+- جریان محصول
+- ورودی‌ها
+- تحلیل‌ها
+- score
+- evidence
+- review action
+- feedback loop
+
+اسلاید چهارم: Monopoly
+
+موضوع:
+
+مزیت رقابتی باید outcome-based باشد، نه صرفاً داشتن داده.
+
+توضیح بده:
+
+- چگونه رابطهٔ change و outcome ثبت می‌شود؟
+- چگونه product با استفادهٔ بیشتر بهتر می‌شود؟
+- چرا این حافظه برای هر سازمان منحصربه‌فرد است؟
+- چه چیزی واقعاً قابل‌کپی نیست؟
+
+از ادعای سادهٔ «network effect» بدون توضیح مکانیزم ارزش خودداری کن.
+
+اسلاید پنجم: Last Mover Advantage
+
+موضوع:
+
+EvoGuard می‌تواند به لایهٔ اعتماد و کنترل تغییرات AI در سازمان تبدیل شود.
+
+برای هر اسلاید ارائه کن:
+
+- عنوان
+- متن کوتاه قابل‌نمایش
+- پیام اصلی
+- توضیح شفاهی founder
+- visual پیشنهادی
+- ادعای قابل‌سنجش
+- objection احتمالی سرمایه‌گذار
+- پاسخ پیشنهادی
+
+از market size ساختگی و ادعاهای غیرقابل‌اثبات پرهیز کن.
+
+────────────────────────
+۱۸. مدل کسب‌وکار و قیمت‌گذاری
+────────────────────────
+
+مدل‌های زیر را مقایسه کن:
+
+- per developer
+- per repository
+- per Pull Request
+- usage-based
+- hybrid
+
+برای هر مدل ارائه کن:
+
+- مزیت
+- عیب
+- تناسب با ارزش واقعی محصول
+- ریسک فروش
+- پیش‌بینی‌پذیری درآمد
+- احتمال سوءاستفاده
+- اثر بر adoption
+
+یک مدل اولیه پیشنهاد بده و دلیل انتخاب را توضیح بده.
+
+Tierها:
+
+Free:
+
+- repository عمومی محدود
+- تعداد محدود analysis
+- گزارش پایه
+- بدون قابلیت‌های enterprise
+- عدم استفاده از داده بدون رضایت
+
+Team:
+
+- repository خصوصی
+- analysis کامل PR
+- historical compatibility
+- dependency analysis
+- evidence-linked review
+- policyهای پایه
+- dashboard
+- feedback و outcome tracking
+
+Enterprise:
+
+- SSO/SAML
+- RBAC
+- audit log
+- on-premise یا private deployment
+- policy enforcement
+- custom retention
+- SIEM integration
+- data residency
+- custom LLM provider
+- customer-managed keys
+- incident system integration
+- advanced analytics
+- dedicated support
+
+برای قیمت‌گذاری از قیمت‌های قطعی و ساختگی استفاده نکن، مگر اینکه آن‌ها را به‌عنوان فرض آزمایشی معرفی کنی.
+
+────────────────────────
+۱۹. تحلیل رقابتی
+────────────────────────
+
+EvoGuard را با دسته‌های زیر مقایسه کن:
+
+- AI code generation
+- AI code review
+- SAST
+- dependency scanning
+- code quality platforms
+- developer analytics
+- internal developer portals
+- software supply-chain provenance
+- CI policy engines
+- observability platforms
+
+برای هر دسته توضیح بده:
+
+- چه چیزی را حل می‌کند؟
+- چه چیزی را حل نمی‌کند؟
+- چه مقدار با EvoGuard هم‌پوشانی دارد؟
+- EvoGuard چه شکاف جدیدی را پر می‌کند؟
+- خطر جایگزین‌شدن توسط این دسته چیست؟
+- استراتژی دفاعی EvoGuard چیست؟
+
+یک جدول رقابتی ارائه کن.
+
+از ادعای نادرست دربارهٔ قابلیت‌های محصولات رقیب خودداری کن.
+
+────────────────────────
+۲۰. ریسک‌های محصول
+────────────────────────
+
+حداقل ۱۵ ریسک را شناسایی کن.
+
+جدول زیر را تکمیل کن:
+
+| ریسک | احتمال | شدت | نشانهٔ زودهنگام | برنامهٔ کاهش | مالک | معیار پایش |
+|---|---:|---:|---|---|---|---|
+
+این ریسک‌ها حتماً بررسی شوند:
+
+- نبود provenance قابل‌اعتماد
+- false positive زیاد
+- بی‌اعتمادی developerها
+- latency بالا
+- هزینهٔ inference
+- دشواری نصب
+- دسترسی به کد خصوصی
+- رقابت با پلتفرم‌های بزرگ
+- ادعای ضعیف دربارهٔ moat
+- عدم امکان اثبات ROI
+- نادرستی historical inference
+- prompt injection
+- تغییر رفتار ابزارهای AI
+- کمبود دادهٔ outcome
+- دشواری on-premise
+- hallucinated evidence
+- عدم پذیرش review commentها
+- policyهای بیش از حد محدودکننده
+- عدم همکاری تیم‌های امنیت و توسعه
+- مشکل data residency
+
+────────────────────────
+۲۱. توصیهٔ نهایی founder
+────────────────────────
+
+در پایان موارد زیر را شفاف ارائه کن:
+
+1. One-sentence product thesis
+2. One-sentence customer value proposition
+3. بهترین beachhead market
+4. مهم‌ترین feature برای شروع
+5. featureهایی که نباید در MVP ساخته شوند
+6. مهم‌ترین فرض قابل‌آزمایش
+7. بهترین design partner
+8. معیار go/no-go در روز ۹۰
+9. چرا این محصول ممکن است شکست بخورد؟
+10. چرا با وجود این ریسک‌ها ارزش ساختن دارد؟
+11. توصیهٔ نهایی: build، pivot یا reject
+12. سه اقدام عملی بعدی برای founder
+13. یک نسخهٔ ساده‌تر از محصول برای تست در ۳۰ روز
+14. یک نشانهٔ قطعی برای توقف پروژه
+15. یک نشانهٔ قوی برای سرمایه‌گذاری بیشتر
+
+────────────────────────
+۲۲. ساختار خروجی
+────────────────────────
+
+پاسخ را با این ساختار ارائه کن:
+
+### خلاصهٔ اجرایی
+
+بین ۲۰۰ تا ۳۰۰ کلمه.
+
+### ارزیابی انتقادی
+
+شامل بازار، مسئله، فرض‌ها، مزیت و ریسک.
+
+### تعریف محصول و MVP
+
+شامل محدوده، user storyها و acceptance criteria.
+
+### معماری فنی
+
+شامل ASCII diagram، جریان داده، اجزا و تصمیم‌های معماری.
+
+### مدل ارزیابی و داده
+
+شامل score، evidence، provenance، historical compatibility و data model.
+
+### تجربهٔ کاربری و داشبورد
+
+شامل صفحه‌ها، workflow و actionهای کاربر.
+
+### امنیت و حریم خصوصی
+
+شامل threat model و سیاست‌های داده.
+
+### Roadmap نودروزه
+
+شامل برنامهٔ هفتگی و اولویت‌بندی RICE یا WSJF.
+
+### Pitch Deck
+
+شامل ۵ اسلاید.
+
+### مدل کسب‌وکار و رقابت
+
+شامل pricing logic و competitor analysis.
+
+### ریسک‌ها و اعتبارسنجی
+
+شامل آزمایش‌ها، معیارها و برنامهٔ کاهش ریسک.
+
+### توصیهٔ نهایی
+
+شامل build، pivot یا reject.
+
+در پایان این جدول را ارائه کن:
+
+| موضوع | وضعیت | دلیل | اقدام پیشنهادی |
+|---|---|---|---|
+
+────────────────────────
+۲۳. قوانین پاسخ
+────────────────────────
+
+قوانین زیر اجباری هستند:
+
+1. نام محصول فقط EvoGuard است.
+2. از نام‌ها و عبارت‌های حذف‌شده استفاده نکن.
+3. vision را از MVP جدا کن.
+4. Pull Request را واحد اصلی محصول قرار بده.
+5. تشخیص قطعی کد AI را ادعا نکن.
+6. provenance را احتمالی، قابل‌ردیابی و دارای confidence طراحی کن.
+7. LLM را منبع حقیقت معرفی نکن.
+8. هر نتیجهٔ مهم باید evidence یا confidence داشته باشد.
+9. observation، inference و policy را از یکدیگر جدا کن.
+10. score را توضیح‌پذیر و چندبعدی طراحی کن.
+11. thresholdها را بدون calibration قطعی فرض نکن.
+12. هیچ patchی نباید فقط به‌خاطر افزایش score خودکار merge شود.
+13. human approval برای تغییرات مهم ضروری است.
+14. privacy و امنیت کد خصوصی باید اصل معماری باشند.
+15. از market size، ROI و moat ساختگی استفاده نکن.
+16. visualization فقط زمانی پیشنهاد شود که به تصمیم بهتر کمک کند.
+17. از feature creep جلوگیری کن.
+18. برای هر feature معیار پذیرش تعریف کن.
+19. برای هر ادعای بزرگ روش اعتبارسنجی ارائه کن.
+20. اگر داده‌ای برای نتیجه‌گیری کافی نیست، صریحاً بنویس:
+   «نیازمند اعتبارسنجی».
+21. پاسخ باید هم برای founder و هم برای Principal Engineer قابل‌استفاده باشد.
+22. لحن باید اعتمادبه‌نفس، دقیق، شکاک و عملیاتی باشد.
+23. از شعارزدگی و استعارهٔ بیش از حد پرهیز کن.
+24. در صورت وجود چند انتخاب، trade-offها را شفاف مقایسه کن.
+25. هیچ capability محصول رقیب را بدون اطمینان قطعی فرض نکن.
+```
+
+**نام محصول در این نسخه فقط EvoGuard است** و تمام ارجاع‌های قبلی به نام حذف‌شده از پرامپت کنار گذاشته شده‌اند.

@@ -1,0 +1,1341 @@
+     1→در ادامه نسخهٔ کامل و نهایی پرامپت را می‌بینی. نام **Behave to One: AI Edition** کاملاً حذف شده و نام محصول فقط **EvoGuard** است.
+     2→
+     3→```text
+     4→نقش تو:
+     5→
+     6→تو یک استراتژیست محصول در سطح جهانی، معمار نرم‌افزار، پژوهشگر مهندسی نرم‌افزار، متخصص AI-assisted software engineering و مشاور طراحی محصولات B2B SaaS هستی.
+     7→
+     8→در حوزه‌های زیر تخصص داری:
+     9→
+    10→- تولید و اصلاح کد با هوش مصنوعی
+    11→- ارزیابی کیفیت، امنیت و maintainability کد
+    12→- مهندسی نرم‌افزار تجربی
+    13→- تحلیل تاریخچهٔ Git
+    14→- تحلیل Pull Request و CI/CD
+    15→- مدیریت technical debt
+    16→- ردیابی منشأ تغییرات و provenance
+    17→- طراحی سیستم‌های قابل‌توضیح و evidence-driven
+    18→- تحلیل dependency و software supply chain
+    19→- طراحی سیاست‌های merge و code review
+    20→- طراحی محصولات enterprise
+    21→- زیست‌شناسی رفتار و مفهوم فشارهای محیطی
+    22→- استراتژی رقابتی و category creation
+    23→- تحلیل بازار و اعتبارسنجی محصول
+    24→
+    25→مأموریت:
+    26→
+    27→یک محصول نرم‌افزاری B2B SaaS به نام «EvoGuard» طراحی کن.
+    28→
+    29→EvoGuard یک پلتفرم «Context-Aware AI Code Integration» است که تغییرات تولیدشده، اصلاح‌شده یا پیشنهادشده توسط هوش مصنوعی را پیش از merge شدن به codebaseهای موجود ارزیابی، توضیح و کنترل می‌کند.
+    30→
+    31→شعار اصلی محصول:
+    32→
+    33→Context before merge.
+    34→
+    35→توصیف کوتاه محصول:
+    36→
+    37→Evidence-driven control for AI-assisted code changes.
+    38→
+    39→تعریف یک‌جمله‌ای محصول:
+    40→
+    41→EvoGuard به تیم‌های مهندسی کمک می‌کند تغییرات AI-assisted را پیش از merge، با تاریخچه، قراردادها، وابستگی‌ها، تست‌ها، محدودیت‌های امنیتی و رفتار واقعی codebase مقایسه کنند.
+    42→
+    43→────────────────────────
+    44→۱. زمینه و مسئله
+    45→────────────────────────
+    46→
+    47→در عصر ابزارهای تولید کد با هوش مصنوعی، مشکل اصلی دیگر صرفاً تولید کد نیست.
+    48→
+    49→مشکل اصلی این است که کد تولیدشده یا اصلاح‌شده توسط AI معمولاً از تاریخچه و فشارهای پنهان codebase آگاهی ندارد.
+    50→
+    51→این فشارها ممکن است شامل موارد زیر باشند:
+    52→
+    53→- incidentهای گذشته
+    54→- revert و rollbackهای قبلی
+    55→- dependencyهای deprecated
+    56→- wrapperهای داخلی
+    57→- قراردادهای معماری
+    58→- conventionهای نانوشتهٔ تیم
+    59→- محدودیت‌های تست
+    60→- شکست‌های CI
+    61→- رفتارهای حساس runtime
+    62→- نیازهای مشتریان قدیمی
+    63→- تصمیم‌های معماری ثبت‌شده در ADR
+    64→- تصمیم‌های معماری ثبت‌نشده
+    65→- محدودیت‌های امنیتی و compliance
+    66→- الگوهایی که در گذشته به technical debt یا outage منجر شده‌اند
+    67→
+    68→یک قطعه کد ممکن است از نظر syntax و type درست باشد، اما همچنان با ecosystem پروژه ناسازگار باشد.
+    69→
+    70→بنابراین EvoGuard باید پیش از merge شدن هر Pull Request مشخص کند:
+    71→
+    72→1. این تغییر با کدام بخش‌های codebase سازگار یا ناسازگار است؟
+    73→2. کدام شواهد تاریخی یا فنی از این ارزیابی پشتیبانی می‌کنند؟
+    74→3. آیا الگوی مشابهی در گذشته به defect، incident، rollback یا revert منجر شده است؟
+    75→4. چه تست، approval، refactor یا بررسی امنیتی بیشتری لازم است؟
+    76→5. کدام قراردادها یا constraintهای پروژه در این تغییر رعایت نشده‌اند؟
+    77→6. آیا پیشنهاد اصلاحی وجود دارد؟
+    78→7. میزان اطمینان سیستم به هر نتیجه چقدر است؟
+    79→
+    80→اصل اساسی:
+    81→
+    82→EvoGuard نباید فقط وضعیت فعلی کد را بررسی کند؛ باید تاریخچه، زمینه و پیامدهای تغییر را نیز تحلیل کند.
+    83→
+    84→────────────────────────
+    85→۲. جایگاه محصول
+    86→────────────────────────
+    87→
+    88→EvoGuard نباید خود را به‌عنوان ابزار عمومی تولید کد معرفی کند.
+    89→
+    90→EvoGuard همچنین نباید صرفاً یک AI code reviewer عمومی یا یک ابزار SAST دیگر باشد.
+    91→
+    92→جایگاه دقیق محصول:
+    93→
+    94→EvoGuard یک لایهٔ کنترل زمینه‌محور برای ادغام تغییرات AI-assisted در codebaseهای پیچیده است.
+    95→
+    96→دستهٔ محصول:
+    97→
+    98→Context-Aware AI Code Integration
+    99→
+   100→مفاهیم کلیدی محصول:
+   101→
+   102→- AI Code Integration
+   103→- AI Code Provenance
+   104→- Context-Aware Change Risk
+   105→- Historical Compatibility
+   106→- Codebase Memory
+   107→- Evidence-Driven Review
+   108→- Change Compatibility
+   109→- Contextual Repair Loop
+   110→- Outcome-Based Engineering Memory
+   111→
+   112→برای هر مفهوم، تعریف فنی و تجاری جداگانه ارائه کن.
+   113→
+   114→از استعاره‌های تکاملی، رفتار و اکوسیستم فقط برای branding و توضیح مفاهیم استفاده کن؛ اما معماری، featureها و KPIها را با زبان روشن مهندسی نرم‌افزار تعریف کن.
+   115→
+   116→────────────────────────
+   117→۳. ارزیابی انتقادی ایده
+   118→────────────────────────
+   119→
+   120→ابتدا ایدهٔ EvoGuard را به‌صورت انتقادی بررسی کن.
+   121→
+   122→این موارد را تحلیل کن:
+   123→
+   124→1. آیا مسئله واقعاً دردناک و قابل‌پرداخت است؟
+   125→2. چه نوع سازمان‌هایی بیشترین درد را دارند؟
+   126→3. آیا این مسئله به‌اندازهٔ کافی فوری است؟
+   127→4. آیا بازار هدف برای ساخت یک کسب‌وکار مستقل کافی است؟
+   128→5. کدام بخش ایده differentiated است؟
+   129→6. کدام بخش صرفاً استعاره یا feature تزئینی است؟
+   130→7. چه ابزارهای موجود با EvoGuard هم‌پوشانی دارند؟
+   131→8. چرا GitHub Copilot، Cursor، CodeRabbit، Qodo، Snyk، SonarQube، Semgrep یا ابزارهای مشابه به‌تنهایی این مسئله را حل نمی‌کنند؟
+   132→9. آیا AI Code Integration یک category قابل‌دفاع است؟
+   133→10. آیا این مفهوم برای CTO و مدیر مهندسی قابل‌فهم و قابل‌خرید است؟
+   134→11. مهم‌ترین فرض‌های قابل‌ابطال چیست؟
+   135→12. چه چیزی ممکن است باعث شکست محصول شود؟
+   136→13. آیا مشتری حاضر است برای این محصول پول پرداخت کند؟
+   137→14. چه زمانی EvoGuard باید pivot کند؟
+   138→15. بهترین wedge اولیه برای ورود به بازار چیست؟
+   139→
+   140→خروجی را در این جدول ارائه کن:
+   141→
+   142→| فرض | اهمیت | احتمال نادرست‌بودن | روش اعتبارسنجی | معیار موفقیت | اقدام در صورت شکست |
+   143→|---|---:|---:|---|---|---|
+   144→
+   145→حداقل ۱۰ فرض کلیدی استخراج کن.
+   146→
+   147→سپس یک تحلیل صریح ارائه کن:
+   148→
+   149→- چرا این محصول ممکن است شکست بخورد؟
+   150→- چرا با وجود این ریسک‌ها ارزش ساختن دارد؟
+   151→- کدام feature باید حذف شود؟
+   152→- کدام feature بیشترین ارزش اولیه را دارد؟
+   153→- چه چیزی باید در ۹۰ روز اول اثبات شود؟
+   154→
+   155→────────────────────────
+   156→۴. بازار هدف و Beachhead Market
+   157→────────────────────────
+   158→
+   159→پرسوناهای مختلف بازار را بررسی کن:
+   160→
+   161→- استارتاپ‌های کوچک
+   162→- شرکت‌های متوسط
+   163→- شرکت‌های enterprise
+   164→- تیم‌های دارای codebase قدیمی
+   165→- تیم‌های پلتفرم و زیرساخت
+   166→- شرکت‌های فین‌تک
+   167→- شرکت‌های سلامت و درمان
+   168→- شرکت‌های SaaS
+   169→- شرکت‌های با الزامات compliance
+   170→- شرکت‌های دارای تیم‌های distributed
+   171→
+   172→سپس یک beachhead market دقیق انتخاب کن.
+   173→
+   174→برای beachhead market انتخاب‌شده مشخص کن:
+   175→
+   176→- اندازهٔ تقریبی تیم
+   177→- نوع codebase
+   178→- ابزارهای فعلی
+   179→- trigger خرید
+   180→- درد اصلی
+   181→- بودجهٔ احتمالی
+   182→- چرخهٔ فروش
+   183→- decision maker
+   184→- کاربر روزانه
+   185→- design partner ایده‌آل
+   186→- دلیل مناسب‌بودن برای MVP
+   187→
+   188→توضیح بده چرا تیم‌های بسیار کوچک و enterpriseهای بسیار بزرگ برای اولین بازار مناسب نیستند.
+   189→
+   190→────────────────────────
+   191→۵. تعریف MVP
+   192→────────────────────────
+   193→
+   194→یک MVP واقعاً قابل‌ساخت برای EvoGuard طراحی کن.
+   195→
+   196→واحد اصلی محصول باید Pull Request یا Change Set باشد، نه خط یا بلوک کد.
+   197→
+   198→MVP باید حداقل قابلیت‌های زیر را داشته باشد:
+   199→
+   200→1. GitHub App یا GitHub Integration.
+   201→2. دریافت Pull Request، diff، commit و metadata.
+   202→3. تحلیل فایل‌ها و symbolهای تغییرکرده.
+   203→4. اجرای static analysis.
+   204→5. تحلیل dependency graph.
+   205→6. بررسی API و contract compatibility.
+   206→7. دریافت نتایج CI، lint و test.
+   207→8. تحلیل revert، rollback و bug-fixهای مرتبط.
+   208→9. شناسایی الگوهای تاریخی پرریسک.
+   209→10. شناسایی conventionهای موجود در repository.
+   210→11. تولید Change Risk Assessment.
+   211→12. تولید evidence-linked review comments.
+   212→13. نمایش score breakdown.
+   213→14. ثبت تصمیم reviewer.
+   214→15. ذخیرهٔ outcome برای ارزیابی آینده.
+   215→16. اجرای policyهای merge در سطح repository یا team.
+   216→17. ثبت provenance احتمالی تغییرات AI-assisted.
+   217→
+   218→برای هر قابلیت مشخص کن:
+   219→
+   220→- چرا در MVP قرار دارد؟
+   221→- ارزش کاربر چیست؟
+   222→- پیچیدگی پیاده‌سازی چیست؟
+   223→- وابستگی فنی چیست؟
+   224→- خروجی مورد انتظار چیست؟
+   225→- معیار پذیرش چیست؟
+   226→- ریسک آن چیست؟
+   227→
+   228→موارد زیر را عمداً از MVP حذف یا به فاز بعد منتقل کن:
+   229→
+   230→- تشخیص قطعی کد AI-generated
+   231→- تحلیل کامل runtime behavior
+   232→- اتصال هم‌زمان به GitHub، GitLab و Bitbucket
+   233→- predictive refactor
+   234→- merge خودکار
+   235→- cross-organization learning
+   236→- network effect عمومی
+   237→- visualization پیچیده شبیه Gource
+   238→- mutation خودکار کد
+   239→- آموزش مدل اختصاصی بزرگ
+   240→- تحلیل کامل incident management
+   241→- پشتیبانی اولیه از همهٔ زبان‌های برنامه‌نویسی
+   242→
+   243→برای هر مورد حذف‌شده توضیح بده:
+   244→
+   245→- چرا اکنون ساخته نمی‌شود؟
+   246→- چه زمانی باید اضافه شود؟
+   247→- پیش‌نیاز اضافه‌شدن آن چیست؟
+   248→
+   249→────────────────────────
+   250→۶. کاربران و پرسوناها
+   251→────────────────────────
+   252→
+   253→پرسوناهای اصلی را تعریف کن:
+   254→
+   255→1. Developer
+   256→2. Staff Engineer
+   257→3. Engineering Manager
+   258→4. Security Engineer
+   259→5. Platform یا DevOps Engineer
+   260→6. Enterprise Architect
+   261→7. CTO
+   262→
+   263→برای هر پرسونا ارائه کن:
+   264→
+   265→- هدف
+   266→- درد اصلی
+   267→- نگرانی
+   268→- تصمیمی که با EvoGuard می‌گیرد
+   269→- KPI مورد علاقه
+   270→- دلیل استفاده
+   271→- دلیل مقاومت
+   272→- دلیل خرید
+   273→- objection اصلی
+   274→- پاسخ پیشنهادی محصول
+   275→
+   276→سپس حداقل ۱۵ user story بنویس.
+   277→
+   278→قالب هر user story:
+   279→
+   280→به‌عنوان [نوع کاربر]،
+   281→می‌خواهم [هدف]،
+   282→تا بتوانم [ارزش].
+   283→
+   284→برای هر user story موارد زیر را نیز بنویس:
+   285→
+   286→- acceptance criteria
+   287→- priority: P0 / P1 / P2
+   288→- دادهٔ موردنیاز
+   289→- dependency فنی
+   290→- ریسک احتمالی
+   291→- روش اندازه‌گیری موفقیت
+   292→
+   293→────────────────────────
+   294→۷. معماری فنی
+   295→────────────────────────
+   296→
+   297→یک معماری production-oriented برای EvoGuard طراحی کن.
+   298→
+   299→معماری باید شامل اجزای زیر باشد:
+   300→
+   301→1. GitHub App یا Integration Layer
+   302→2. Webhook Ingestion Service
+   303→3. Authentication و Authorization Service
+   304→4. Change Normalization Pipeline
+   305→5. Repository Snapshot Service
+   306→6. Git History Miner
+   307→7. Dependency Graph Builder
+   308→8. Static Analysis Orchestrator
+   309→9. Test و CI Evidence Collector
+   310→10. Convention Miner
+   311→11. Historical Event Detector
+   312→12. Provenance Service
+   313→13. Evidence Store
+   314→14. Context Builder
+   315→15. Risk Scoring Engine
+   316→16. Policy Engine
+   317→17. LLM Explanation Layer
+   318→18. Review Comment Publisher
+   319→19. Feedback و Outcome Tracker
+   320→20. Dashboard API
+   321→21. Audit و Privacy Layer
+   322→22. Notification Service
+   323→23. Evaluation و Calibration Service
+   324→
+   325→یک نمودار ASCII ارائه کن که مسیر داده را از Pull Request تا گزارش نهایی نشان دهد.
+   326→
+   327→نمودار باید حداقل چنین جریانی را نشان دهد:
+   328→
+   329→```text
+   330→Pull Request
+   331→     |
+   332→     v
+   333→Integration Layer
+   334→     |
+   335→     v
+   336→Change Normalization
+   337→     |
+   338→     +------------------+
+   339→     |                  |
+   340→     v                  v
+   341→Git History        Static Analysis
+   342→     |                  |
+   343→     v                  v
+   344→Historical Events  CI/Test Evidence
+   345→     |                  |
+   346→     +--------+---------+
+   347→              |
+   348→              v
+   349→Dependency and Convention Context
+   350→              |
+   351→              v
+   352→Evidence Store
+   353→              |
+   354→              v
+   355→Context Builder
+   356→              |
+   357→              v
+   358→Risk Scoring Engine
+   359→              |
+   360→              v
+   361→LLM Explanation Layer
+   362→              |
+   363→              v
+   364→Policy Engine
+   365→              |
+   366→              v
+   367→GitHub Review Comments and Dashboard
+   368→              |
+   369→              v
+   370→Reviewer Decision and Outcome
+   371→```
+   372→
+   373→مسیر داده را مرحله‌به‌مرحله توضیح بده.
+   374→
+   375→اصل معماری:
+   376→
+   377→LLM نباید منبع حقیقت باشد.
+   378→
+   379→LLM فقط باید:
+   380→
+   381→- evidenceهای ساختاریافته را توضیح دهد
+   382→- ریسک‌ها را به زبان انسانی تبدیل کند
+   383→- فرض‌ها را فهرست کند
+   384→- review comment پیشنهادی تولید کند
+   385→- rewrite prompt یا patch پیشنهادی ارائه کند
+   386→
+   387→منبع حقیقت برای موارد زیر باید تا حد امکان deterministic یا evidence-based باشد:
+   388→
+   389→- نتیجهٔ تست
+   390→- lint violation
+   391→- dependency version
+   392→- policy violation
+   393→- secret detection
+   394→- SAST finding
+   395→- commit و PR history
+   396→- ownership
+   397→- approval status
+   398→
+   399→معماری را از نظر موارد زیر تحلیل کن:
+   400→
+   401→- مقیاس‌پذیری
+   402→- latency
+   403→- صف پردازش
+   404→- caching
+   405→- multi-tenancy
+   406→- tenant isolation
+   407→- امنیت
+   408→- مدیریت secret
+   409→- auditability
+   410→- هزینهٔ inference
+   411→- fail-open و fail-closed behavior
+   412→- دسترسی به کد خصوصی
+   413→- حذف داده
+   414→- data retention
+   415→- on-premise deployment
+   416→- disaster recovery
+   417→- observability
+   418→- rate limiting
+   419→
+   420→────────────────────────
+   421→۸. مدل چندبعدی Change Compatibility Score
+   422→────────────────────────
+   423→
+   424→به‌جای یک امتیاز مبهم، یک مدل چندبعدی و قابل‌توضیح طراحی کن.
+   425→
+   426→نام امتیاز را انتخاب کن:
+   427→
+   428→- ECS: Ecosystem Compatibility Score
+   429→- CCRS: Contextual Change Risk Score
+   430→- یا یک نام بهتر
+   431→
+   432→نام انتخاب‌شده را با دلیل توضیح بده.
+   433→
+   434→امتیاز باید حداقل این ابعاد را داشته باشد:
+   435→
+   436→1. Contract Compatibility
+   437→2. Historical Compatibility
+   438→3. Dependency Compatibility
+   439→4. Test Compatibility
+   440→5. Convention Compatibility
+   441→6. Security Risk
+   442→7. Runtime Risk، در صورت وجود داده
+   443→8. Ownership and Review Risk
+   444→9. Architecture Compatibility
+   445→
+   446→برای هر بُعد مشخص کن:
+   447→
+   448→- تعریف
+   449→- ورودی‌ها
+   450→- الگوریتم محاسبه
+   451→- نوع evidence
+   452→- confidence
+   453→- severity
+   454→- false positiveهای محتمل
+   455→- false negativeهای محتمل
+   456→- روش اعتبارسنجی
+   457→- اقدام پیشنهادی
+   458→
+   459→خروجی باید شامل score کلی و breakdown باشد.
+   460→
+   461→نمونه:
+   462→
+   463→```text
+   464→Overall compatibility: 74/100
+   465→Confidence: 0.86
+   466→
+   467→Contract compatibility: 91/100
+   468→Historical compatibility: 62/100
+   469→Dependency compatibility: 58/100
+   470→Test compatibility: 83/100
+   471→Convention compatibility: 79/100
+   472→Security risk: Low
+   473→Ownership risk: Medium
+   474→
+   475→Recommendation:
+   476→Review required
+   477→
+   478→Top evidence:
+   479→- الگوی مشابه در دو Pull Request قبلی به rollback منجر شده است.
+   480→- API استفاده‌شده deprecated است.
+   481→- regression test برای timeout وجود ندارد.
+   482→- فایل تغییرکرده مالک مشخصی دارد اما owner review دریافت نکرده است.
+   483→```
+   484→
+   485→یک فرمول اولیه ارائه کن، اما به‌صراحت بنویس که وزن‌ها باید با دادهٔ واقعی calibrate شوند.
+   486→
+   487→مثلاً:
+   488→
+   489→```text
+   490→Compatibility Score =
+   491→w1 * Contract Compatibility
+   492→+ w2 * Historical Compatibility
+   493→+ w3 * Dependency Compatibility
+   494→+ w4 * Test Compatibility
+   495→+ w5 * Convention Compatibility
+   496→+ w6 * Architecture Compatibility
+   497→- w7 * Security Risk
+   498→- w8 * Ownership Risk
+   499→```
+   500→
+   501→توضیح بده چرا score نمی‌تواند تنها معیار merge باشد.
+   502→
+   503→برای scoreهای مختلف policy پیشنهاد کن:
+   504→
+   505→- ۹۰ تا ۱۰۰: low-friction merge
+   506→- ۷۰ تا ۸۹: merge با review عادی
+   507→- ۵۰ تا ۶۹: review اجباری یا تست تکمیلی
+   508→- کمتر از ۵۰: block یا approval ویژه
+   509→
+   510→تأکید کن که این thresholdها جهانی و قطعی نیستند و باید با baseline هر repository و دادهٔ واقعی تنظیم شوند.
+   511→
+   512→────────────────────────
+   513→۹. Historical Compatibility و Codebase Memory
+   514→────────────────────────
+   515→
+   516→توضیح بده EvoGuard چگونه از منابع زیر evidence استخراج می‌کند:
+   517→
+   518→- Git commit history
+   519→- revert و rollback
+   520→- Pull Request discussion
+   521→- issues
+   522→- incident و postmortem
+   523→- ADR
+   524→- CODEOWNERS
+   525→- CI failure
+   526→- test history
+   527→- dependency migration
+   528→- changelog
+   529→- release notes
+   530→
+   531→برای MVP فقط منابع ضروری را انتخاب کن.
+   532→
+   533→برای هر منبع توضیح بده:
+   534→
+   535→- ارزش آن چیست؟
+   536→- reliability آن چقدر است؟
+   537→- چه نوع evidence تولید می‌کند؟
+   538→- false inference محتمل چیست؟
+   539→- آیا در MVP است یا بعداً اضافه می‌شود؟
+   540→
+   541→برای Historical Event این schema را ارائه کن:
+   542→
+   543→```text
+   544→HistoricalEvent
+   545→- id
+   546→- repository_id
+   547→- event_type
+   548→- affected_files
+   549→- affected_symbols
+   550→- pattern_signature
+   551→- failure_mode
+   552→- outcome
+   553→- severity
+   554→- evidence_refs
+   555→- valid_from
+   556→- valid_until
+   557→- confidence
+   558→- created_at
+   559→- updated_at
+   560→```
+   561→
+   562→توضیح بده چگونه سیستم از یک رویداد تاریخی، constraint قابل‌استفاده برای PR جدید می‌سازد؛ بدون اینکه علت را بیش از اندازه از داده‌ها استنباط کند.
+   563→
+   564→بین این سه سطح تفاوت روشن بگذار:
+   565→
+   566→1. Observation
+   567→2. Inference
+   568→3. Policy
+   569→
+   570→مثال:
+   571→
+   572→```text
+   573→Observation:
+   574→این الگو در دو commit بعداً revert شده است.
+   575→
+   576→Inference:
+   577→این الگو احتمالاً در این codebase پرریسک است.
+   578→
+   579→Policy:
+   580→استفاده از این الگو نیازمند approval مالک سرویس است.
+   581→```
+   582→
+   583→سیستم نباید inference را به‌عنوان fact قطعی نمایش دهد.
+   584→
+   585→────────────────────────
+   586→۱۰. Provenance و منشأ تغییرات
+   587→────────────────────────
+   588→
+   589→یک مدل واقع‌بینانه برای provenance طراحی کن.
+   590→
+   591→EvoGuard نباید ادعا کند که می‌تواند با قطعیت تشخیص دهد کدام خط توسط AI تولید شده است.
+   592→
+   593→سیستم باید این حالت‌ها را ثبت کند:
+   594→
+   595→- کد مستقیماً از یک ابزار AI اعلام‌شده آمده است.
+   596→- کد با AI اصلاح یا refactor شده است.
+   597→- کد از چند منبع ترکیبی آمده است.
+   598→- کد به‌صورت احتمالی AI-assisted است.
+   599→- منشأ کد نامشخص است.
+   600→
+   601→سطوح provenance:
+   602→
+   603→- declared
+   604→- inferred
+   605→- unknown
+   606→
+   607→هر provenance باید confidence بین ۰ و ۱ داشته باشد.
+   608→
+   609→schema زیر را تکمیل کن:
+   610→
+   611→```text
+   612→ProvenanceRecord
+   613→- id
+   614→- change_id
+   615→- source_type
+   616→- provider
+   617→- model_name
+   618→- model_version
+   619→- generation_timestamp
+   620→- context_hash
+   621→- declared_by
+   622→- inference_method
+   623→- confidence
+   624→- evidence_refs
+   625→- privacy_level
+   626→- retention_policy
+   627→- created_at
+   628→```
+   629→
+   630→توضیح بده:
+   631→
+   632→- چه اطلاعاتی ذخیره می‌شود؟
+   633→- چه اطلاعاتی ذخیره نمی‌شود؟
+   634→- آیا prompt خام ذخیره می‌شود؟
+   635→- چگونه promptهای حساس محافظت می‌شوند؟
+   636→- چگونه secretها redaction می‌شوند؟
+   637→- چه زمانی provenance حذف یا anonymize می‌شود؟
+   638→- آیا دادهٔ provenance برای training استفاده می‌شود؟
+   639→- چه رضایتی برای training لازم است؟
+   640→- چگونه provenance در audit استفاده می‌شود؟
+   641→
+   642→────────────────────────
+   643→۱۱. Contextual Repair Loop
+   644→────────────────────────
+   645→
+   646→بخش Adaptive Mutation را به یک فرایند امن به نام Contextual Repair Loop تبدیل کن.
+   647→
+   648→این فرایند باید شامل مراحل زیر باشد:
+   649→
+   650→1. شناسایی مشکل
+   651→2. جمع‌آوری evidence
+   652→3. تعیین constraint
+   653→4. توضیح زمینه برای developer
+   654→5. تولید rewrite prompt یا patch پیشنهادی
+   655→6. اجرای static analysis
+   656→7. اجرای test و CI
+   657→8. مقایسهٔ قبل و بعد
+   658→9. بررسی اثرات جانبی
+   659→10. human review
+   660→11. ثبت تصمیم
+   661→12. ثبت outcome
+   662→13. rollback در صورت شکست
+   663→
+   664→هیچ patchی نباید فقط به‌دلیل افزایش score به‌صورت خودکار merge شود.
+   665→
+   666→برای این بخش مشخص کن:
+   667→
+   668→- prompt template
+   669→- guardrail
+   670→- validation pipeline
+   671→- test strategy
+   672→- rollback strategy
+   673→- human approval
+   674→- معیار موفقیت
+   675→- failure modeها
+   676→- حدود اختیار مدل
+   677→- فایل‌هایی که مدل مجاز به تغییر آن‌ها نیست
+   678→
+   679→نمونهٔ rewrite prompt تولید کن:
+   680→
+   681→```text
+   682→Rewrite this change while preserving its public behavior.
+   683→
+   684→Repository constraints:
+   685→- Use the internal HTTP wrapper defined in [path].
+   686→- Do not use pattern [X] because it was associated with [evidence].
+   687→- Preserve compatibility with [API/version/client].
+   688→- Add a regression test for [behavior].
+   689→- Follow the convention used in [reference files].
+   690→- Do not modify files outside [allowed scope].
+   691→- Do not remove existing security checks.
+   692→- Do not change public interfaces unless explicitly approved.
+   693→
+   694→Evidence:
+   695→- Pull Request: [reference]
+   696→- Commit: [reference]
+   697→- Incident: [reference]
+   698→- Dependency constraint: [reference]
+   699→- Test failure: [reference]
+   700→
+   701→Return:
+   702→1. proposed patch
+   703→2. assumptions
+   704→3. files changed
+   705→4. tests added or required
+   706→5. compatibility risks
+   707→6. unresolved risks
+   708→7. explanation of why the patch fits this repository
+   709→```
+   710→
+   711→────────────────────────
+   712→۱۲. Data Model
+   713→────────────────────────
+   714→
+   715→یک data model کامل برای EvoGuard ارائه کن.
+   716→
+   717→Entityهای حداقل:
+   718→
+   719→- Organization
+   720→- User
+   721→- Repository
+   722→- RepositorySnapshot
+   723→- PullRequest
+   724→- Commit
+   725→- ChangeSet
+   726→- FileChange
+   727→- Symbol
+   728→- ProvenanceRecord
+   729→- Dependency
+   730→- DependencyVersion
+   731→- Constraint
+   732→- HistoricalEvent
+   733→- Evidence
+   734→- Assessment
+   735→- ScoreDimension
+   736→- ReviewDecision
+   737→- Policy
+   738→- Outcome
+   739→- IncidentLink
+   740→- TestResult
+   741→- CIResult
+   742→- OwnershipRule
+   743→- AuditEvent
+   744→- Notification
+   745→
+   746→برای هر entity مشخص کن:
+   747→
+   748→- فیلدها
+   749→- نوع داده
+   750→- primary key
+   751→- foreign key
+   752→- index
+   753→- access control
+   754→- retention policy
+   755→- sensitivity level
+   756→
+   757→relationshipها را با ERD متنی نمایش بده.
+   758→
+   759→نمونه:
+   760→
+   761→```text
+   762→Organization 1---N Repository
+   763→Repository 1---N PullRequest
+   764→PullRequest 1---1 ChangeSet
+   765→ChangeSet 1---N FileChange
+   766→ChangeSet 1---N Evidence
+   767→ChangeSet 1---1 Assessment
+   768→Assessment 1---N ScoreDimension
+   769→Assessment 1---N ReviewDecision
+   770→Assessment 1---N Outcome
+   771→Repository 1---N HistoricalEvent
+   772→HistoricalEvent 1---N Constraint
+   773→ChangeSet 1---N ProvenanceRecord
+   774→```
+   775→
+   776→────────────────────────
+   777→۱۳. Dashboard و تجربهٔ کاربری
+   778→────────────────────────
+   779→
+   780→صفحه‌های اصلی محصول را طراحی کن:
+   781→
+   782→1. PR Risk Overview
+   783→2. Evidence Explorer
+   784→3. Historical Pattern View
+   785→4. Dependency Risk View
+   786→5. Policy and Constraints
+   787→6. Codebase Memory
+   788→7. Review Outcomes
+   789→8. Evolutionary Analytics
+   790→9. Repository Health
+   791→10. Administration and Privacy
+   792→
+   793→برای هر صفحه مشخص کن:
+   794→
+   795→- کاربر هدف
+   796→- سؤال اصلی کاربر
+   797→- داده‌های نمایش‌داده‌شده
+   798→- action اصلی
+   799→- هشدارهای احتمالی
+   800→- معیار usability
+   801→- زمان موردنیاز برای درک صفحه
+   802→- خطر overload اطلاعاتی
+   803→
+   804→داشبورد را بیش از حد استعاری نکن.
+   805→
+   806→هر visualization باید یک تصمیم مشخص را پشتیبانی کند.
+   807→
+   808→به‌جای نمایش صرفاً جذاب، بر این موارد تمرکز کن:
+   809→
+   810→- چرا این تغییر پرریسک است؟
+   811→- evidence چیست؟
+   812→- چه کاری باید انجام شود؟
+   813→- چه کسی باید review کند؟
+   814→- آیا این هشدار درست بوده است؟
+   815→- آیا outcome تغییر را تأیید یا رد کرده است؟
+   816→
+   817→────────────────────────
+   818→۱۴. امنیت و حریم خصوصی
+   819→────────────────────────
+   820→
+   821→Threat model کاملی برای EvoGuard ارائه کن.
+   822→
+   823→تهدیدهای زیر را بررسی کن:
+   824→
+   825→- دسترسی به کد خصوصی
+   826→- prompt injection در کد یا issue
+   827→- data exfiltration
+   828→- cross-tenant leakage
+   829→- malicious Pull Request
+   830→- poisoned repository history
+   831→- dependency confusion
+   832→- hallucinated evidence
+   833→- insecure generated patch
+   834→- مدل یا provider ثالث
+   835→- نگهداری prompt و diff
+   836→- insider threat
+   837→- سرقت token
+   838→- دسترسی بیش از حد GitHub App
+   839→- نشت اطلاعات از log
+   840→- ذخیرهٔ ناامن embedding
+   841→- سوءاستفاده از review bot
+   842→- جعل provenance
+   843→- دستکاری outcome
+   844→- حمله به webhook
+   845→
+   846→برای هر تهدید این موارد را بنویس:
+   847→
+   848→- attack scenario
+   849→- asset
+   850→- impact
+   851→- likelihood
+   852→- mitigation
+   853→- residual risk
+   854→- detection method
+   855→- owner
+   856→
+   857→سیاست‌های زیر را پیشنهاد کن:
+   858→
+   859→- least privilege
+   860→- encryption in transit
+   861→- encryption at rest
+   862→- tenant isolation
+   863→- secret redaction
+   864→- audit log
+   865→- retention policy
+   866→- deletion policy
+   867→- on-premise option
+   868→- LLM provider policy
+   869→- عدم استفاده از دادهٔ مشتری برای training بدون رضایت صریح
+   870→- data residency
+   871→- customer-managed keys
+   872→- SSO/SAML
+   873→- RBAC
+   874→- approval workflow
+   875→- incident response
+   876→
+   877→────────────────────────
+   878→۱۵. معیارهای موفقیت و آزمایش
+   879→────────────────────────
+   880→
+   881→معیارهای محصول را به سه گروه تقسیم کن.
+   882→
+   883→الف) Adoption Metrics:
+   884→
+   885→- درصد PRهایی که analysis روی آن‌ها اجرا می‌شود
+   886→- تعداد repository فعال
+   887→- نرخ بازگشت کاربران
+   888→- زمان مشاهدهٔ گزارش
+   889→- استفاده از evidence explorer
+   890→- تعداد review commentهای پذیرفته‌شده
+   891→- درصد policyهای فعال
+   892→- درصد developerهای فعال هفتگی
+   893→
+   894→ب) Quality Metrics:
+   895→
+   896→- precision هشدارها
+   897→- recall در defectهای شناخته‌شده
+   898→- false positive rate
+   899→- reviewer acceptance rate
+   900→- reviewer dismissal rate
+   901→- defect detection rate
+   902→- rollback prevention
+   903→- calibration score
+   904→- coverage تحلیل
+   905→- latency
+   906→- failure rate pipeline
+   907→- درصد claimهای دارای evidence
+   908→- درصد hallucinated evidence
+   909→
+   910→ج) Business Metrics:
+   911→
+   912→- conversion
+   913→- retention
+   914→- expansion
+   915→- کاهش زمان review
+   916→- کاهش incidentهای مرتبط با change
+   917→- کاهش rollback
+   918→- willingness to pay
+   919→- هزینهٔ analysis به‌ازای PR
+   920→- gross margin
+   921→- time to value
+   922→
+   923→یک طراحی آزمایش ۹۰روزه ارائه کن که شامل این موارد باشد:
+   924→
+   925→- baseline
+   926→- گروه آزمایشی
+   927→- گروه کنترل در صورت امکان
+   928→- تعداد repository
+   929→- مدت آزمایش
+   930→- متغیرهای اصلی
+   931→- معیار موفقیت
+   932→- معیار توقف
+   933→- خطرهای تفسیر نادرست
+   934→- روش کنترل bias
+   935→- روش جمع‌آوری feedback
+   936→
+   937→از ادعاهای بزرگ مانند «کاهش technical debt» بدون تعریف عملیاتی و دورهٔ اندازه‌گیری استفاده نکن.
+   938→
+   939→────────────────────────
+   940→۱۶. Roadmap نودروزه
+   941→────────────────────────
+   942→
+   943→یک roadmap دقیق ۹۰روزه برای EvoGuard طراحی کن.
+   944→
+   945→Roadmap را به سه فاز تقسیم کن.
+   946→
+   947→فاز اول: روزهای ۱ تا ۳۰ — Evidence MVP
+   948→
+   949→قابلیت‌ها:
+   950→
+   951→- GitHub App
+   952→- PR ingestion
+   953→- diff و commit analysis
+   954→- static analysis
+   955→- CI result collection
+   956→- test result collection
+   957→- dependency extraction اولیه
+   958→- گزارش اولیه
+   959→- privacy baseline
+   960→- audit log پایه
+   961→
+   962→فاز دوم: روزهای ۳۱ تا ۶۰ — Historical Compatibility
+   963→
+   964→قابلیت‌ها:
+   965→
+   966→- revert detection
+   967→- rollback detection
+   968→- historical pattern mining
+   969→- dependency compatibility
+   970→- evidence-linked review comments
+   971→- convention extraction
+   972→- feedback capture
+   973→- score calibration اولیه
+   974→
+   975→فاز سوم: روزهای ۶۱ تا ۹۰ — Production Pilot
+   976→
+   977→قابلیت‌ها:
+   978→
+   979→- policy engine
+   980→- dashboard
+   981→- outcome tracking
+   982→- pilot با چند repository واقعی
+   983→- usability testing
+   984→- reliability improvement
+   985→- cost optimization
+   986→- security hardening
+   987→- case study اولیه
+   988→- go/no-go decision
+   989→
+   990→برای هر هفته مشخص کن:
+   991→
+   992→- هدف
+   993→- deliverable
+   994→- owner
+   995→- وابستگی
+   996→- ریسک
+   997→- معیار پذیرش
+   998→- featureهای خارج از محدوده
+   999→- خروجی قابل‌نمایش برای design partner
+  1000→
+  1001→سپس featureها را با RICE یا WSJF اولویت‌بندی کن.
+  1002→
+  1003→محاسبه را نیز نشان بده:
+  1004→
+  1005→```text
+  1006→RICE = Reach × Impact × Confidence / Effort
+  1007→```
+  1008→
+  1009→فرض‌های Reach، Impact، Confidence و Effort را برای هر feature توضیح بده.
+  1010→
+  1011→────────────────────────
+  1012→۱۷. Pitch Deck پنج‌اسلایدی
+  1013→────────────────────────
+  1014→
+  1015→یک pitch deck پنج‌اسلایدی با زبان استراتژیک Peter Thiel طراحی کن.
+  1016→
+  1017→اسلایدها:
+  1018→
+  1019→1. Problem
+  1020→2. Secret
+  1021→3. Product
+  1022→4. Monopoly
+  1023→5. Last Mover Advantage
+  1024→
+  1025→اسلاید اول: Problem
+  1026→
+  1027→موضوع:
+  1028→
+  1029→AI سرعت تولید کد را بالا برده، اما codebaseها را سریع‌تر از ظرفیت فهم انسان تغییر می‌دهد.
+  1030→
+  1031→توضیح بده:
+  1032→
+  1033→- چرا تولید کد دیگر گلوگاه اصلی نیست؟
+  1034→- چرا code review عمومی کافی نیست؟
+  1035→- چرا context پنهان codebase ارزش اقتصادی دارد؟
+  1036→
+  1037→اسلاید دوم: Secret
+  1038→
+  1039→موضوع:
+  1040→
+  1041→هر codebase فشارهای تاریخی دارد که در وضعیت فعلی کد دیده نمی‌شوند.
+  1042→
+  1043→توضیح بده:
+  1044→
+  1045→- چگونه incident، revert، dependency و convention رفتار codebase را شکل می‌دهند؟
+  1046→- چرا این اطلاعات در ابزارهای عمومی دیده نمی‌شوند؟
+  1047→- چرا حافظهٔ codebase ارزشمند است؟
+  1048→
+  1049→اسلاید سوم: Product
+  1050→
+  1051→موضوع:
+  1052→
+  1053→EvoGuard لایهٔ evidence-driven برای ادغام تغییرات AI-assisted است.
+  1054→
+  1055→توضیح بده:
+  1056→
+  1057→- جریان محصول
+  1058→- ورودی‌ها
+  1059→- تحلیل‌ها
+  1060→- score
+  1061→- evidence
+  1062→- review action
+  1063→- feedback loop
+  1064→
+  1065→اسلاید چهارم: Monopoly
+  1066→
+  1067→موضوع:
+  1068→
+  1069→مزیت رقابتی باید outcome-based باشد، نه صرفاً داشتن داده.
+  1070→
+  1071→توضیح بده:
+  1072→
+  1073→- چگونه رابطهٔ change و outcome ثبت می‌شود؟
+  1074→- چگونه product با استفادهٔ بیشتر بهتر می‌شود؟
+  1075→- چرا این حافظه برای هر سازمان منحصربه‌فرد است؟
+  1076→- چه چیزی واقعاً قابل‌کپی نیست؟
+  1077→
+  1078→از ادعای سادهٔ «network effect» بدون توضیح مکانیزم ارزش خودداری کن.
+  1079→
+  1080→اسلاید پنجم: Last Mover Advantage
+  1081→
+  1082→موضوع:
+  1083→
+  1084→EvoGuard می‌تواند به لایهٔ اعتماد و کنترل تغییرات AI در سازمان تبدیل شود.
+  1085→
+  1086→برای هر اسلاید ارائه کن:
+  1087→
+  1088→- عنوان
+  1089→- متن کوتاه قابل‌نمایش
+  1090→- پیام اصلی
+  1091→- توضیح شفاهی founder
+  1092→- visual پیشنهادی
+  1093→- ادعای قابل‌سنجش
+  1094→- objection احتمالی سرمایه‌گذار
+  1095→- پاسخ پیشنهادی
+  1096→
+  1097→از market size ساختگی و ادعاهای غیرقابل‌اثبات پرهیز کن.
+  1098→
+  1099→────────────────────────
+  1100→۱۸. مدل کسب‌وکار و قیمت‌گذاری
+  1101→────────────────────────
+  1102→
+  1103→مدل‌های زیر را مقایسه کن:
+  1104→
+  1105→- per developer
+  1106→- per repository
+  1107→- per Pull Request
+  1108→- usage-based
+  1109→- hybrid
+  1110→
+  1111→برای هر مدل ارائه کن:
+  1112→
+  1113→- مزیت
+  1114→- عیب
+  1115→- تناسب با ارزش واقعی محصول
+  1116→- ریسک فروش
+  1117→- پیش‌بینی‌پذیری درآمد
+  1118→- احتمال سوءاستفاده
+  1119→- اثر بر adoption
+  1120→
+  1121→یک مدل اولیه پیشنهاد بده و دلیل انتخاب را توضیح بده.
+  1122→
+  1123→Tierها:
+  1124→
+  1125→Free:
+  1126→
+  1127→- repository عمومی محدود
+  1128→- تعداد محدود analysis
+  1129→- گزارش پایه
+  1130→- بدون قابلیت‌های enterprise
+  1131→- عدم استفاده از داده بدون رضایت
+  1132→
+  1133→Team:
+  1134→
+  1135→- repository خصوصی
+  1136→- analysis کامل PR
+  1137→- historical compatibility
+  1138→- dependency analysis
+  1139→- evidence-linked review
+  1140→- policyهای پایه
+  1141→- dashboard
+  1142→- feedback و outcome tracking
+  1143→
+  1144→Enterprise:
+  1145→
+  1146→- SSO/SAML
+  1147→- RBAC
+  1148→- audit log
+  1149→- on-premise یا private deployment
+  1150→- policy enforcement
+  1151→- custom retention
+  1152→- SIEM integration
+  1153→- data residency
+  1154→- custom LLM provider
+  1155→- customer-managed keys
+  1156→- incident system integration
+  1157→- advanced analytics
+  1158→- dedicated support
+  1159→
+  1160→برای قیمت‌گذاری از قیمت‌های قطعی و ساختگی استفاده نکن، مگر اینکه آن‌ها را به‌عنوان فرض آزمایشی معرفی کنی.
+  1161→
+  1162→────────────────────────
+  1163→۱۹. تحلیل رقابتی
+  1164→────────────────────────
+  1165→
+  1166→EvoGuard را با دسته‌های زیر مقایسه کن:
+  1167→
+  1168→- AI code generation
+  1169→- AI code review
+  1170→- SAST
+  1171→- dependency scanning
+  1172→- code quality platforms
+  1173→- developer analytics
+  1174→- internal developer portals
+  1175→- software supply-chain provenance
+  1176→- CI policy engines
+  1177→- observability platforms
+  1178→
+  1179→برای هر دسته توضیح بده:
+  1180→
+  1181→- چه چیزی را حل می‌کند؟
+  1182→- چه چیزی را حل نمی‌کند؟
+  1183→- چه مقدار با EvoGuard هم‌پوشانی دارد؟
+  1184→- EvoGuard چه شکاف جدیدی را پر می‌کند؟
+  1185→- خطر جایگزین‌شدن توسط این دسته چیست؟
+  1186→- استراتژی دفاعی EvoGuard چیست؟
+  1187→
+  1188→یک جدول رقابتی ارائه کن.
+  1189→
+  1190→از ادعای نادرست دربارهٔ قابلیت‌های محصولات رقیب خودداری کن.
+  1191→
+  1192→────────────────────────
+  1193→۲۰. ریسک‌های محصول
+  1194→────────────────────────
+  1195→
+  1196→حداقل ۱۵ ریسک را شناسایی کن.
+  1197→
+  1198→جدول زیر را تکمیل کن:
+  1199→
+  1200→| ریسک | احتمال | شدت | نشانهٔ زودهنگام | برنامهٔ کاهش | مالک | معیار پایش |
+  1201→|---|---:|---:|---|---|---|---|
+  1202→
+  1203→این ریسک‌ها حتماً بررسی شوند:
+  1204→
+  1205→- نبود provenance قابل‌اعتماد
+  1206→- false positive زیاد
+  1207→- بی‌اعتمادی developerها
+  1208→- latency بالا
+  1209→- هزینهٔ inference
+  1210→- دشواری نصب
+  1211→- دسترسی به کد خصوصی
+  1212→- رقابت با پلتفرم‌های بزرگ
+  1213→- ادعای ضعیف دربارهٔ moat
+  1214→- عدم امکان اثبات ROI
+  1215→- نادرستی historical inference
+  1216→- prompt injection
+  1217→- تغییر رفتار ابزارهای AI
+  1218→- کمبود دادهٔ outcome
+  1219→- دشواری on-premise
+  1220→- hallucinated evidence
+  1221→- عدم پذیرش review commentها
+  1222→- policyهای بیش از حد محدودکننده
+  1223→- عدم همکاری تیم‌های امنیت و توسعه
+  1224→- مشکل data residency
+  1225→
+  1226→────────────────────────
+  1227→۲۱. توصیهٔ نهایی founder
+  1228→────────────────────────
+  1229→
+  1230→در پایان موارد زیر را شفاف ارائه کن:
+  1231→
+  1232→1. One-sentence product thesis
+  1233→2. One-sentence customer value proposition
+  1234→3. بهترین beachhead market
+  1235→4. مهم‌ترین feature برای شروع
+  1236→5. featureهایی که نباید در MVP ساخته شوند
+  1237→6. مهم‌ترین فرض قابل‌آزمایش
+  1238→7. بهترین design partner
+  1239→8. معیار go/no-go در روز ۹۰
+  1240→9. چرا این محصول ممکن است شکست بخورد؟
+  1241→10. چرا با وجود این ریسک‌ها ارزش ساختن دارد؟
+  1242→11. توصیهٔ نهایی: build، pivot یا reject
+  1243→12. سه اقدام عملی بعدی برای founder
+  1244→13. یک نسخهٔ ساده‌تر از محصول برای تست در ۳۰ روز
+  1245→14. یک نشانهٔ قطعی برای توقف پروژه
+  1246→15. یک نشانهٔ قوی برای سرمایه‌گذاری بیشتر
+  1247→
+  1248→────────────────────────
+  1249→۲۲. ساختار خروجی
+  1250→────────────────────────
+  1251→
+  1252→پاسخ را با این ساختار ارائه کن:
+  1253→
+  1254→### خلاصهٔ اجرایی
+  1255→
+  1256→بین ۲۰۰ تا ۳۰۰ کلمه.
+  1257→
+  1258→### ارزیابی انتقادی
+  1259→
+  1260→شامل بازار، مسئله، فرض‌ها، مزیت و ریسک.
+  1261→
+  1262→### تعریف محصول و MVP
+  1263→
+  1264→شامل محدوده، user storyها و acceptance criteria.
+  1265→
+  1266→### معماری فنی
+  1267→
+  1268→شامل ASCII diagram، جریان داده، اجزا و تصمیم‌های معماری.
+  1269→
+  1270→### مدل ارزیابی و داده
+  1271→
+  1272→شامل score، evidence، provenance، historical compatibility و data model.
+  1273→
+  1274→### تجربهٔ کاربری و داشبورد
+  1275→
+  1276→شامل صفحه‌ها، workflow و actionهای کاربر.
+  1277→
+  1278→### امنیت و حریم خصوصی
+  1279→
+  1280→شامل threat model و سیاست‌های داده.
+  1281→
+  1282→### Roadmap نودروزه
+  1283→
+  1284→شامل برنامهٔ هفتگی و اولویت‌بندی RICE یا WSJF.
+  1285→
+  1286→### Pitch Deck
+  1287→
+  1288→شامل ۵ اسلاید.
+  1289→
+  1290→### مدل کسب‌وکار و رقابت
+  1291→
+  1292→شامل pricing logic و competitor analysis.
+  1293→
+  1294→### ریسک‌ها و اعتبارسنجی
+  1295→
+  1296→شامل آزمایش‌ها، معیارها و برنامهٔ کاهش ریسک.
+  1297→
+  1298→### توصیهٔ نهایی
+  1299→
+  1300→شامل build، pivot یا reject.
+  1301→
+  1302→در پایان این جدول را ارائه کن:
+  1303→
+  1304→| موضوع | وضعیت | دلیل | اقدام پیشنهادی |
+  1305→|---|---|---|---|
+  1306→
+  1307→────────────────────────
+  1308→۲۳. قوانین پاسخ
+  1309→────────────────────────
+  1310→
+  1311→قوانین زیر اجباری هستند:
+  1312→
+  1313→1. نام محصول فقط EvoGuard است.
+  1314→2. از نام‌ها و عبارت‌های حذف‌شده استفاده نکن.
+  1315→3. vision را از MVP جدا کن.
+  1316→4. Pull Request را واحد اصلی محصول قرار بده.
+  1317→5. تشخیص قطعی کد AI را ادعا نکن.
+  1318→6. provenance را احتمالی، قابل‌ردیابی و دارای confidence طراحی کن.
+  1319→7. LLM را منبع حقیقت معرفی نکن.
+  1320→8. هر نتیجهٔ مهم باید evidence یا confidence داشته باشد.
+  1321→9. observation، inference و policy را از یکدیگر جدا کن.
+  1322→10. score را توضیح‌پذیر و چندبعدی طراحی کن.
+  1323→11. thresholdها را بدون calibration قطعی فرض نکن.
+  1324→12. هیچ patchی نباید فقط به‌خاطر افزایش score خودکار merge شود.
+  1325→13. human approval برای تغییرات مهم ضروری است.
+  1326→14. privacy و امنیت کد خصوصی باید اصل معماری باشند.
+  1327→15. از market size، ROI و moat ساختگی استفاده نکن.
+  1328→16. visualization فقط زمانی پیشنهاد شود که به تصمیم بهتر کمک کند.
+  1329→17. از feature creep جلوگیری کن.
+  1330→18. برای هر feature معیار پذیرش تعریف کن.
+  1331→19. برای هر ادعای بزرگ روش اعتبارسنجی ارائه کن.
+  1332→20. اگر داده‌ای برای نتیجه‌گیری کافی نیست، صریحاً بنویس:
+  1333→   «نیازمند اعتبارسنجی».
+  1334→21. پاسخ باید هم برای founder و هم برای Principal Engineer قابل‌استفاده باشد.
+  1335→22. لحن باید اعتمادبه‌نفس، دقیق، شکاک و عملیاتی باشد.
+  1336→23. از شعارزدگی و استعارهٔ بیش از حد پرهیز کن.
+  1337→24. در صورت وجود چند انتخاب، trade-offها را شفاف مقایسه کن.
+  1338→25. هیچ capability محصول رقیب را بدون اطمینان قطعی فرض نکن.
+  1339→```
+  1340→
+  1341→**نام محصول در این نسخه فقط EvoGuard است** و تمام ارجاع‌های قبلی به نام حذف‌شده از پرامپت کنار گذاشته شده‌اند.
