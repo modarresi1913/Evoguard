@@ -1,0 +1,44 @@
+# CODEOWNERS — EvoGuard
+# These owners are automatically requested as reviewers on PRs that touch
+# the corresponding paths. Add yourself with your GitHub handle.
+#
+# Format: <path pattern> @<github-handle> [@<github-handle> ...]
+#
+# Default owner — fallback for everything not matched below
+*                           @modarresi1913
+
+# Frontend — Next.js App Router and global theme
+/src/app/                   @modarresi1913
+/src/app/layout.tsx         @modarresi1913
+/src/app/page.tsx           @modarresi1913
+/src/app/globals.css        @modarresi1913
+
+# EvoGuard UI components
+/src/components/evoguard/   @modarresi1913
+/src/components/evoguard/dashboard/  @modarresi1913
+
+# Mock data (single source of truth for the demo)
+/src/lib/evoguard/           @modarresi1913
+
+# shadcn/ui primitives (vendored, rarely changed)
+/src/components/ui/          @modarresi1913
+
+# Documentation
+/README.md                  @modarresi1913
+/llms.txt                   @modarresi1913
+/SEO.md                     @modarresi1913
+/CONTRIBUTING.md            @modarresi1913
+
+# CI / workflows / templates
+/.github/                   @modarresi1913
+/.github/workflows/         @modarresi1913
+
+# Configuration
+/package.json               @modarresi1913
+/tsconfig.json              @modarresi1913
+/tailwind.config.ts         @modarresi1913
+/next.config.ts             @modarresi1913
+/vercel.json                @modarresi1913
+
+# Public assets
+/public/                    @modarresi1913

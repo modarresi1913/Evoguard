@@ -1,0 +1,129 @@
+name: 🐛 Bug Report
+description: Report a defect in the EvoGuard demo dashboard or documentation
+title: "[bug] "
+labels: ["bug", "triage"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug report for EvoGuard! 🐛
+        Please fill out the information below so we can reproduce and fix it.
+
+  - type: checkboxes
+    id: search-first
+    attributes:
+      label: Preflight checklist
+      description: Please confirm before submitting
+      options:
+        - label: I have searched the existing issues to make sure this is not a duplicate
+          required: true
+        - label: I am running the latest commit on `main`
+          required: true
+        - label: I have read the [README](https://github.com/modarresi1913/Evoguard/blob/main/README.md) and the [FAQ](https://github.com/modarresi1913/Evoguard#-faq)
+          required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Affected area
+      description: Where did the bug occur?
+      options:
+        - Landing page (hero, nav, footer)
+        - Dashboard — Risk Overview
+        - Dashboard — Evidence Explorer
+        - Dashboard — Historical Patterns
+        - Dashboard — Provenance
+        - Dashboard — Review Comments
+        - Dashboard — Policy & Gates
+        - Pitch deck
+        - Architecture / Score Model section
+        - Documentation (README, llms.txt, SEO.md)
+        - Build / CI / Deployment
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: A clear description of the bug.
+      placeholder: |
+        When I clicked on the "Evidence Explorer" tab in the dashboard, the page
+        rendered an empty state instead of the evidence list. The browser console
+        showed a TypeError...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect to happen?
+      placeholder: The evidence list should render with 4 items...
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Detailed steps so we can reproduce locally.
+      placeholder: |
+        1. Run `bun install && bun run dev`
+        2. Open http://localhost:3000
+        3. Scroll to the dashboard section
+        4. Click on "Evidence Explorer" tab
+        5. Observe the empty state
+      value: |
+        1.
+        2.
+        3.
+        4.
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots / Recordings
+      description: |
+        If applicable, attach screenshots or screen recordings.
+        Drag files here or paste from clipboard (Ctrl/Cmd+V).
+
+  - type: input
+    id: os
+    attributes:
+      label: Operating System
+      placeholder: macOS 14.2, Windows 11, Ubuntu 22.04
+    validations:
+      required: true
+
+  - type: input
+    id: browser
+    attributes:
+      label: Browser
+      placeholder: Chrome 127, Firefox 129, Safari 17
+    validations:
+      required: true
+
+  - type: input
+    id: node-version
+    attributes:
+      label: Node / Bun version
+      placeholder: "node 20.10.0, bun 1.1.0"
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Console / Dev server logs
+      description: Paste any relevant errors from the browser console or terminal.
+      render: shell
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context
+      description: Anything else that might be relevant?
