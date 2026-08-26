@@ -877,34 +877,21 @@ Built with ❤️ for engineering teams who refuse to merge blind.
 
 ---
 
-<!-- SEO Meta (hidden)
-Keywords: AI code review, code provenance, context-aware code analysis, pull request quality gate,
-GitHub Copilot safety, Cursor AI safety, AI code integration, codebase memory, evidence-driven review,
-AI code reviewer, code review automation, PR analysis tool, developer tools, B2B SaaS, AI-assisted development,
-code quality, static analysis, SAST, dependency scanning, technical debt management, AI code generation safety,
-context-aware code review, AI provenance tracking, codebase history analysis, pull request risk assessment,
-EvoGuard, Context before merge, ECS score, ecosystem compatibility score, AI code trust layer
+<!--
+SEO Keywords (for search engines and AI crawlers — these are also in the
+repository topics and in llms.txt):
+AI code review, AI code reviewer, code provenance, AI code provenance,
+context-aware code analysis, pull request quality gate, GitHub App,
+pull request analysis, codebase memory, developer tools, AI code integration,
+evidence-driven review, merge gate, policy engine, static analysis, SAST,
+dependency scanning, technical debt, AI-assisted development,
+GitHub Copilot safety, Cursor AI safety, Codeium, code review automation,
+PR analysis tool, B2B SaaS developer tools, ECS score,
+ecosystem compatibility score, AI code trust layer, EvoGuard,
+Context before merge.
+
+Structured data is provided in src/app/layout.tsx as a JSON-LD script
+injected into the HTML <head> (not in this README, because GitHub Markdown
+renders <script> tags as visible text).
 -->
 
-<!-- Structured Data for Search Engines (JSON-LD) -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  "name": "EvoGuard",
-  "description": "Evidence-driven control for AI-assisted code changes. A Context-Aware AI Code Integration platform that evaluates, explains, and gates AI-touched Pull Requests before they reach main.",
-  "url": "https://github.com/modarresi1913/Evoguard",
-  "applicationCategory": "DeveloperApplication",
-  "operatingSystem": "Web",
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "USD"
-  },
-  "creator": {
-    "@type": "Organization",
-    "name": "EvoGuard"
-  },
-  "keywords": "AI code review, code provenance, context-aware, GitHub App, pull request analysis, codebase memory, developer tools"
-}
-</script>
