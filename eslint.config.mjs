@@ -19,6 +19,10 @@ const eslintConfig = [...nextCoreWebVitals, ...nextTypescript, {
     // React rules
     "react-hooks/exhaustive-deps": "off",
     "react-hooks/purity": "off",
+    // Disabled: shadcn/ui components legitimately call setState in effect bodies
+    // for subscription patterns (useToast, useMobile, sidebar keyboard handler).
+    // This rule is too aggressive for vendored component libraries.
+    "react-hooks/set-state-in-effect": "off",
     "react/no-unescaped-entities": "off",
     "react/display-name": "off",
     "react/prop-types": "off",
