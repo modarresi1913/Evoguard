@@ -1,14 +1,8 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
 # dependencies
-node_modules
+/node_modules
 /.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
+.pnp.js
+.yarn/install-state.gz
 
 # testing
 /coverage
@@ -30,25 +24,40 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# local env files
+.env
+.env*.local
+.env.development
+.env.production
 
 # vercel
 .vercel
 
-
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-local-*
-.claude
-.z-ai-config
-*.log
-dev.log
-dev.out.log
-test
-prompt
 
+# logs
+dev.log
 server.log
-# Skills directory
+*.log
+
+# prisma
+/prisma/migrations/dev.db*
+
+# zscripts (internal dev tooling — transient state files only)
+/.zscripts/dev.pid
+/.zscripts/dev.log
+
+# local sqlite databases
+/db/*.db
+/db/*.db-journal
+
+# internal skills/tooling (not part of EvoGuard deliverable)
 /skills/
+
+# tool-results (transient)
+/tool-results/
+
+# upload (transient user uploads)
+/upload/
