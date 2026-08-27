@@ -5,14 +5,6 @@
   "description": "EvoGuard — Context before merge. Evidence-driven control for AI-assisted code changes.",
   "license": "Proprietary",
   "author": "EvoGuard",
-  "homepage": "https://github.com/modarresi1913/Evoguard",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/modarresi1913/Evoguard.git"
-  },
-  "bugs": {
-    "url": "https://github.com/modarresi1913/Evoguard/issues"
-  },
   "keywords": [
     "ai-code-review",
     "code-provenance",
