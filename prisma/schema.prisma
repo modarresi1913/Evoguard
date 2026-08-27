@@ -7,14 +7,34 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model EvidenceSnapshot {
+  id            String   @id @default(cuid())
+  prNumber      Int
+  repoFullName  String
+  headSha       String
+  evidenceType  String   // "PR_OPENED" | "PR_UPDATED" | "PRE_MERGE"
+  changedFiles  String   // JSON: [{filename, status, additions, deletions}]
+  diffStats     String?  // JSON: {additions, deletions, changedFiles}
+  reviewComments String? // JSON: [{author, body, path, line, createdAt}]
+  checkStatuses String?  // JSON: [{name, status, conclusion}]
+  prTitle       String?
+  prBody        String?
+  rawPayload    String?  // full webhook payload for audit
+  createdAt     DateTime @default(now())
+
+  decisions     DecisionRecord[]
+}
+
 model DecisionRecord {
-  id              String   @id @default(cuid())
-  decisionId      String   @unique
-  prNumber        Int
-  repoFullName    String
-  mergeCommitSha  String
-  author          String?
-  prTitle         String?
-  prBody          String?
-  createdAt       DateTime @default(now())
+  id                String            @id @default(cuid())
+  decisionId        String            @unique
+  prNumber          Int
+  repoFullName      String
+  mergeCommitSha    String
+  author            String?
+  prTitle           String?
+  prBody            String?
+  createdAt         DateTime          @default(now())
+
+  evidenceSnapshots EvidenceSnapshot[]
 }
