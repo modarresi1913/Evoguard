@@ -66,3 +66,5 @@ server.log
 /prisma/schema.prisma
 /public/logo.svg
 /tests/
+prisma/*.db
+prisma/*.db
