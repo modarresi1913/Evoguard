@@ -38,3 +38,18 @@ model DecisionRecord {
 
   evidenceSnapshots EvidenceSnapshot[]
 }
+
+model ConflictDetection {
+  id              String   @id @default(cuid())
+  repoFullName    String
+  prNumberA       Int
+  prNumberB       Int
+  sharedFiles     String   // JSON: [filename, ...]
+  fileCount       Int
+  severity        String   @default("warning")  // "info" | "warning" | "critical"
+  detectedAt      DateTime @default(now())
+  resolvedAt      DateTime?
+  resolution      String?  // "merged_a" | "merged_b" | "closed" | "manual"
+
+  @@unique([repoFullName, prNumberA, prNumberB])
+}

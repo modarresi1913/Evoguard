@@ -19,7 +19,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Search, GitMerge, FileText, MessageSquare, CheckCircle2, XCircle, Clock, Copy, ExternalLink } from 'lucide-react';
+import { Search, GitMerge, FileText, MessageSquare, CheckCircle2, XCircle, Clock, Copy, ExternalLink, AlertTriangle } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface Decision {
@@ -72,6 +72,25 @@ const checkIcon = (conclusion: string | null) => {
   return <Clock className="w-3.5 h-3.5 text-amber-400" />;
 };
 
+interface Conflict {
+  id: string;
+  repoFullName: string;
+  prNumberA: number;
+  prNumberB: number;
+  sharedFiles: string[];
+  fileCount: number;
+  severity: string;
+  detectedAt: string;
+  resolvedAt: string | null;
+  resolution: string | null;
+}
+
+const severityStyle: Record<string, string> = {
+  critical: 'bg-rose-500/15 text-rose-300 ring-1 ring-rose-500/30',
+  warning: 'bg-amber-500/15 text-amber-300 ring-1 ring-amber-500/30',
+  info: 'bg-sky-500/15 text-sky-300 ring-1 ring-sky-500/30',
+};
+
 export function DecisionsView() {
   const [decisions, setDecisions] = useState<Decision[]>([]);
   const [pagination, setPagination] = useState<Pagination>({ total: 0, limit: 20, offset: 0, hasMore: false });
@@ -79,6 +98,17 @@ export function DecisionsView() {
   const [search, setSearch] = useState('');
   const [selectedDecision, setSelectedDecision] = useState<DecisionDetail | null>(null);
   const [detailLoading, setDetailLoading] = useState(false);
+  const [conflicts, setConflicts] = useState<Conflict[]>([]);
+
+  const fetchConflicts = useCallback(async () => {
+    try {
+      const params = new URLSearchParams();
+      if (search) params.set('repo', search);
+      const res = await fetch(`/api/conflicts?${params}`);
+      const json = await res.json();
+      setConflicts(json.data ?? []);
+    } catch { /* silent */ }
+  }, [search]);
 
   const fetchDecisions = useCallback(async () => {
     setLoading(true);
@@ -98,9 +128,9 @@ export function DecisionsView() {
   }, [search]);
 
   useEffect(() => {
-    const t = setTimeout(fetchDecisions, 300);
+    const t = setTimeout(() => { fetchDecisions(); fetchConflicts(); }, 300);
     return () => clearTimeout(t);
-  }, [fetchDecisions]);
+  }, [fetchDecisions, fetchConflicts]);
 
   const openDetail = async (decisionId: string) => {
     setDetailLoading(true);
@@ -142,6 +172,34 @@ export function DecisionsView() {
           />
         </div>
       </div>
+
+      {/* Active Conflicts Banner */}
+      {conflicts.length > 0 && (
+        <Card className="border-rose-500/30 bg-rose-500/[0.03] backdrop-blur">
+          <CardContent className="p-3">
+            <div className="flex items-center gap-2 mb-2">
+              <AlertTriangle className="w-4 h-4 text-rose-400" />
+              <span className="text-sm font-medium text-rose-300">Active Conflicts ({conflicts.length})</span>
+            </div>
+            <div className="space-y-1.5 max-h-36 overflow-y-auto scrollbar-thin">
+              {conflicts.slice(0, 5).map((c) => (
+                <div key={c.id} className="flex items-center justify-between text-[11px] bg-background/40 rounded px-2 py-1.5">
+                  <span className="font-mono text-foreground/80">
+                    <span className="text-primary">#{c.prNumberA}</span>
+                    <span className="text-muted-foreground mx-1">x</span>
+                    <span className="text-primary">#{c.prNumberB}</span>
+                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-muted-foreground font-mono">{c.fileCount} file{c.fileCount !== 1 ? 's' : ''}</span>
+                    <span className={`text-[10px] font-mono px-1.5 py-0 rounded ${severityStyle[c.severity] ?? severityStyle.info}`}>{c.severity}</span>
+                  </div>
+                </div>
+              ))}
+              {conflicts.length > 5 && <div className="text-[10px] text-muted-foreground text-center">+{conflicts.length - 5} more</div>}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Table */}
       <Card className="border-border/60 bg-card/40 backdrop-blur">
