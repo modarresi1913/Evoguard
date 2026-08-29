@@ -12,14 +12,14 @@ model EvidenceSnapshot {
   prNumber      Int
   repoFullName  String
   headSha       String
-  evidenceType  String   // "PR_OPENED" | "PR_UPDATED" | "PRE_MERGE"
-  changedFiles  String   // JSON: [{filename, status, additions, deletions}]
-  diffStats     String?  // JSON: {additions, deletions, changedFiles}
-  reviewComments String? // JSON: [{author, body, path, line, createdAt}]
-  checkStatuses String?  // JSON: [{name, status, conclusion}]
+  evidenceType  String
+  changedFiles  String
+  diffStats     String?
+  reviewComments String?
+  checkStatuses String?
   prTitle       String?
   prBody        String?
-  rawPayload    String?  // full webhook payload for audit
+  rawPayload    String?
   createdAt     DateTime @default(now())
 
   decisions     DecisionRecord[]
@@ -39,17 +39,31 @@ model DecisionRecord {
   evidenceSnapshots EvidenceSnapshot[]
 }
 
+model DecisionDAGEdge {
+  id              String   @id @default(cuid())
+  repoFullName    String
+  parentPrNumber  Int
+  childPrNumber   Int
+  sharedFiles     String
+  fileCount       Int
+  reason          String   @default("file_overlap")
+  satisfied       Boolean  @default(false)
+  createdAt       DateTime @default(now())
+
+  @@unique([repoFullName, parentPrNumber, childPrNumber])
+}
+
 model ConflictDetection {
   id              String   @id @default(cuid())
   repoFullName    String
   prNumberA       Int
   prNumberB       Int
-  sharedFiles     String   // JSON: [filename, ...]
+  sharedFiles     String
   fileCount       Int
-  severity        String   @default("warning")  // "info" | "warning" | "critical"
+  severity        String   @default("warning")
   detectedAt      DateTime @default(now())
   resolvedAt      DateTime?
-  resolution      String?  // "merged_a" | "merged_b" | "closed" | "manual"
+  resolution      String?
 
   @@unique([repoFullName, prNumberA, prNumberB])
 }

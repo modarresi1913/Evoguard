@@ -1,5 +1,6 @@
 import { db } from '@/lib/db';
 import { fetchOpenPRs, fetchChangedFiles, type ChangedFile } from '@/lib/evoguard/github-api';
+import { buildDAGFromConflicts } from '@/lib/evoguard/dag-builder';
 
 export interface ConflictResult {
   repoFullName: string;
@@ -79,6 +80,11 @@ export async function detectConflicts(params: {
       fileCount: shared.length,
       severity,
     });
+  }
+
+  // Rebuild DAG edges from updated conflicts
+  if (newConflicts.length > 0) {
+    await buildDAGFromConflicts(repoFullName);
   }
 
   return newConflicts;

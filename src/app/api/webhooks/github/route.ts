@@ -13,6 +13,7 @@ import {
   collectEvidence,
 } from '@/lib/evoguard/github-api';
 import { detectConflicts, resolveConflicts } from '@/lib/evoguard/conflict-detector';
+import { satisfyDAGEdges } from '@/lib/evoguard/dag-builder';
 import { db } from '@/lib/db';
 
 // ---- Shared helpers ----
@@ -166,12 +167,13 @@ async function handleMergedPr(event: PullRequestMergedEvent) {
     }
   }
 
-  // Resolve any conflicts involving this PR
+  // Resolve conflicts + satisfy DAG edges
   try {
     await resolveConflicts({ repoFullName, prNumber: pr.number, resolution: 'merged_b' });
-    console.log(`[EvoGuard] Resolved conflicts for merged PR #${pr.number}`);
+    await satisfyDAGEdges(repoFullName, pr.number);
+    console.log(`[EvoGuard] Resolved conflicts + DAG edges for PR #${pr.number}`);
   } catch (err) {
-    console.error('[EvoGuard] Conflict resolution failed:', err);
+    console.error('[EvoGuard] Conflict/DAG resolution failed:', err);
   }
 
   const existingSnapshots = await db.evidenceSnapshot.count({ where: { prNumber: pr.number, repoFullName } });

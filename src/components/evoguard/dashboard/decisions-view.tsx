@@ -19,7 +19,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Search, GitMerge, FileText, MessageSquare, CheckCircle2, XCircle, Clock, Copy, ExternalLink, AlertTriangle } from 'lucide-react';
+import { Search, GitMerge, FileText, MessageSquare, CheckCircle2, XCircle, Clock, Copy, ExternalLink, AlertTriangle, ArrowRight, Lock } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface Decision {
@@ -91,6 +91,21 @@ const severityStyle: Record<string, string> = {
   info: 'bg-sky-500/15 text-sky-300 ring-1 ring-sky-500/30',
 };
 
+interface MergeOrderItem {
+  prNumber: number;
+  prTitle: string | null;
+  author: string | null;
+  canMergeNow: boolean;
+  blockedBy: number[];
+  sharedFileCount: number;
+}
+
+interface MergeOrderData {
+  repoFullName: string;
+  totalNodes: number;
+  orderedPRs: MergeOrderItem[];
+}
+
 export function DecisionsView() {
   const [decisions, setDecisions] = useState<Decision[]>([]);
   const [pagination, setPagination] = useState<Pagination>({ total: 0, limit: 20, offset: 0, hasMore: false });
@@ -99,6 +114,7 @@ export function DecisionsView() {
   const [selectedDecision, setSelectedDecision] = useState<DecisionDetail | null>(null);
   const [detailLoading, setDetailLoading] = useState(false);
   const [conflicts, setConflicts] = useState<Conflict[]>([]);
+  const [mergeOrder, setMergeOrder] = useState<MergeOrderData | null>(null);
 
   const fetchConflicts = useCallback(async () => {
     try {
@@ -107,6 +123,16 @@ export function DecisionsView() {
       const res = await fetch(`/api/conflicts?${params}`);
       const json = await res.json();
       setConflicts(json.data ?? []);
+    } catch { /* silent */ }
+  }, [search]);
+
+  const fetchMergeOrder = useCallback(async () => {
+    if (!search) { setMergeOrder(null); return; }
+    try {
+      const res = await fetch(`/api/dag?repo=${encodeURIComponent(search)}`);
+      const json = await res.json();
+      const data = json.data as MergeOrderData;
+      setMergeOrder(data.totalNodes > 0 ? data : null);
     } catch { /* silent */ }
   }, [search]);
 
@@ -128,9 +154,9 @@ export function DecisionsView() {
   }, [search]);
 
   useEffect(() => {
-    const t = setTimeout(() => { fetchDecisions(); fetchConflicts(); }, 300);
+    const t = setTimeout(() => { fetchDecisions(); fetchConflicts(); fetchMergeOrder(); }, 300);
     return () => clearTimeout(t);
-  }, [fetchDecisions, fetchConflicts]);
+  }, [fetchDecisions, fetchConflicts, fetchMergeOrder]);
 
   const openDetail = async (decisionId: string) => {
     setDetailLoading(true);
@@ -196,6 +222,41 @@ export function DecisionsView() {
                 </div>
               ))}
               {conflicts.length > 5 && <div className="text-[10px] text-muted-foreground text-center">+{conflicts.length - 5} more</div>}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Merge Order DAG */}
+      {mergeOrder && mergeOrder.totalNodes > 0 && (
+        <Card className="border-primary/30 bg-primary/[0.03] backdrop-blur">
+          <CardContent className="p-3">
+            <div className="flex items-center gap-2 mb-2">
+              <GitMerge className="w-4 h-4 text-primary" />
+              <span className="text-sm font-medium text-primary">Suggested Merge Order ({mergeOrder.totalNodes} PRs)</span>
+            </div>
+            <div className="space-y-1">
+              {mergeOrder.orderedPRs.map((item, i) => (
+                <div key={item.prNumber} className="flex items-center gap-2 text-[11px] bg-background/40 rounded px-2 py-1.5">
+                  <span className="text-muted-foreground font-mono w-5 text-right">{i + 1}.</span>
+                  {item.canMergeNow ? (
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                  ) : (
+                    <Lock className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                  )}
+                  <span className={`font-mono ${item.canMergeNow ? 'text-foreground' : 'text-muted-foreground'}`}>#{item.prNumber}</span>
+                  {item.prTitle && <span className="text-foreground/70 truncate max-w-[180px]">{item.prTitle}</span>}
+                  <span className="text-muted-foreground/50 font-mono">{item.sharedFileCount} shared</span>
+                  {!item.canMergeNow && item.blockedBy.length > 0 && (
+                    <span className="ml-auto flex items-center gap-1 text-amber-300/70 font-mono">
+                      blocked by {item.blockedBy.map(b => `#${b}`).join(', ')}
+                    </span>
+                  )}
+                  {mergeOrder.orderedPRs[i + 1] && (
+                    <ArrowRight className="w-3 h-3 text-muted-foreground/30 ml-auto" />
+                  )}
+                </div>
+              ))}
             </div>
           </CardContent>
         </Card>
