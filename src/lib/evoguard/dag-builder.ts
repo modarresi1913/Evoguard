@@ -1,11 +1,36 @@
 import { db } from '@/lib/db';
 
+// ---- Types ----
+
 export interface DAGNode {
   prNumber: number;
   prTitle: string | null;
   author: string | null;
-  inDegree: number;      // edges pointing TO this node
-  outEdges: string[];     // shared files on each outgoing edge
+  inDegree: number;
+  outEdges: string[];
+}
+
+export interface DAGEdge {
+  parentPrNumber: number;
+  childPrNumber: number;
+  sharedFiles: string[];
+  fileCount: number;
+  satisfied: boolean;
+}
+
+export interface DAGGraph {
+  repoFullName: string;
+  nodes: Array<{
+    prNumber: number;
+    prTitle: string | null;
+    author: string | null;
+    inDegree: number;
+    outDegree: number;
+  }>;
+  edges: DAGEdge[];
+  hasCycle: boolean;
+  totalNodes: number;
+  totalEdges: number;
 }
 
 export interface MergeOrder {
@@ -15,10 +40,103 @@ export interface MergeOrder {
     prNumber: number;
     prTitle: string | null;
     author: string | null;
-    canMergeNow: boolean;  // inDegree === 0
-    blockedBy: number[];    // parent PRs not yet merged
+    canMergeNow: boolean;
+    blockedBy: number[];
     sharedFileCount: number;
   }>;
+}
+
+// ---- Cycle Detection (DFS-based) ----
+
+/**
+ * Detect cycles in a directed graph using iterative DFS with 3-color marking.
+ * Returns true if adding candidateEdge would create a cycle.
+ * Used as a guard before inserting new edges.
+ */
+export function wouldCreateCycle(
+  existingEdges: Array<{ parent: number; child: number }>,
+  candidateParent: number,
+  candidateChild: number,
+): boolean {
+  // Build adjacency from existing edges
+  const adj = new Map<number, number[]>();
+  for (const e of existingEdges) {
+    const list = adj.get(e.parent) ?? [];
+    list.push(e.child);
+    adj.set(e.parent, list);
+  }
+
+  // If candidateChild can already reach candidateParent via existing edges,
+  // adding candidateParent -> candidateChild would create a cycle.
+  const visited = new Set<number>();
+  const stack = [candidateChild];
+
+  while (stack.length > 0) {
+    const node = stack.pop()!;
+    if (node === candidateParent) return true;
+    if (visited.has(node)) continue;
+    visited.add(node);
+
+    const neighbors = adj.get(node) ?? [];
+    for (const n of neighbors) {
+      if (!visited.has(n)) stack.push(n);
+    }
+  }
+
+  return false;
+}
+
+/**
+ * Full cycle detection on the entire edge set.
+ * Returns an array of PR numbers that form a cycle, or empty array if acyclic.
+ */
+export function detectCycles(edges: Array<{ parent: number; child: number }>): number[][] {
+  const adj = new Map<number, number[]>();
+  const allNodes = new Set<number>();
+
+  for (const e of edges) {
+    allNodes.add(e.parent);
+    allNodes.add(e.child);
+    const list = adj.get(e.parent) ?? [];
+    list.push(e.child);
+    adj.set(e.parent, list);
+  }
+
+  const WHITE = 0; // unvisited
+  const GRAY = 1;  // in current DFS path
+  const BLACK = 2; // fully explored
+
+  const color = new Map<number, number>();
+  for (const n of allNodes) color.set(n, WHITE);
+
+  const cycles: number[][] = [];
+  const path: number[] = [];
+
+  function dfs(node: number): boolean {
+    color.set(node, GRAY);
+    path.push(node);
+
+    for (const neighbor of (adj.get(node) ?? [])) {
+      const c = color.get(neighbor);
+      if (c === GRAY) {
+        // Found cycle — extract it
+        const cycleStart = path.indexOf(neighbor);
+        cycles.push(path.slice(cycleStart));
+      } else if (c === WHITE) {
+        dfs(neighbor);
+      }
+    }
+
+    path.pop();
+    color.set(node, BLACK);
+    return false;
+  }
+
+  for (const n of allNodes) {
+    if (color.get(n) === WHITE) dfs(n);
+  }
+
+  return cycles;
 }
 
 /**
@@ -32,10 +150,26 @@ export async function buildDAGFromConflicts(repoFullName: string) {
     where: { repoFullName, resolvedAt: null },
   });
 
+  // Fetch existing edges for cycle guard
+  const existingEdges = await db.decisionDAGEdge.findMany({
+    where: { repoFullName },
+    select: { parentPrNumber: true, childPrNumber: true },
+  });
+
   for (const c of conflicts) {
     // Lower PR number = parent (should merge first — simpler, earlier change)
     const parentPr = Math.min(c.prNumberA, c.prNumberB);
     const childPr = Math.max(c.prNumberA, c.prNumberB);
+
+    // Cycle guard: skip if this edge would create a cycle
+    if (wouldCreateCycle(
+      existingEdges.map((e) => ({ parent: e.parentPrNumber, child: e.childPrNumber })),
+      parentPr,
+      childPr,
+    )) {
+      console.log(`[EvoGuard DAG] Skipping edge ${parentPr} -> ${childPr}: would create cycle`);
+      continue;
+    }
 
     await db.$executeRawUnsafe(`
       INSERT INTO DecisionDAGEdge (repoFullName, parentPrNumber, childPrNumber, sharedFiles, fileCount, reason)
@@ -147,5 +281,60 @@ export async function computeMergeOrder(repoFullName: string): Promise<MergeOrde
     repoFullName,
     totalNodes: allPRs.size,
     orderedPRs,
+  };
+}
+
+/**
+ * Get the full DAG graph structure for visualization.
+ * Returns nodes, edges, and cycle detection status.
+ */
+export async function getDAGGraph(repoFullName: string): Promise<DAGGraph> {
+  const edges = await db.decisionDAGEdge.findMany({
+    where: { repoFullName, satisfied: false },
+  });
+
+  // Build node set with in/out degrees
+  const nodeMap = new Map<number, { prTitle: string | null; author: string | null; inDegree: number; outDegree: number }>();
+
+  for (const e of edges) {
+    if (!nodeMap.has(e.parentPrNumber)) {
+      const snap = await db.evidenceSnapshot.findFirst({
+        where: { prNumber: e.parentPrNumber, repoFullName },
+        orderBy: { createdAt: 'desc' },
+      });
+      nodeMap.set(e.parentPrNumber, { prTitle: snap?.prTitle ?? null, author: null, inDegree: 0, outDegree: 0 });
+    }
+    if (!nodeMap.has(e.childPrNumber)) {
+      const snap = await db.evidenceSnapshot.findFirst({
+        where: { prNumber: e.childPrNumber, repoFullName },
+        orderBy: { createdAt: 'desc' },
+      });
+      nodeMap.set(e.childPrNumber, { prTitle: snap?.prTitle ?? null, author: null, inDegree: 0, outDegree: 0 });
+    }
+    nodeMap.get(e.parentPrNumber)!.outDegree++;
+    nodeMap.get(e.childPrNumber)!.inDegree++;
+  }
+
+  const graphEdges: DAGEdge[] = edges.map((e) => ({
+    parentPrNumber: e.parentPrNumber,
+    childPrNumber: e.childPrNumber,
+    sharedFiles: JSON.parse(e.sharedFiles) as string[],
+    fileCount: e.fileCount,
+    satisfied: e.satisfied,
+  }));
+
+  // Check for cycles
+  const cycles = detectCycles(edges.map((e) => ({ parent: e.parentPrNumber, child: e.childPrNumber })));
+
+  return {
+    repoFullName,
+    nodes: Array.from(nodeMap.entries()).map(([prNumber, info]) => ({
+      prNumber,
+      ...info,
+    })),
+    edges: graphEdges,
+    hasCycle: cycles.length > 0,
+    totalNodes: nodeMap.size,
+    totalEdges: edges.length,
   };
 }

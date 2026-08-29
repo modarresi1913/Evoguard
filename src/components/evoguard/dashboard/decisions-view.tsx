@@ -19,8 +19,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Search, GitMerge, FileText, MessageSquare, CheckCircle2, XCircle, Clock, Copy, ExternalLink, AlertTriangle, ArrowRight, Lock } from 'lucide-react';
+import { Search, GitMerge, FileText, MessageSquare, CheckCircle2, XCircle, Clock, Copy, ExternalLink, AlertTriangle, ArrowRight, Lock, Network } from 'lucide-react';
 import { toast } from 'sonner';
+import { DAGGraphView } from '@/components/evoguard/dashboard/dag-graph';
 
 interface Decision {
   id: string;
@@ -227,13 +228,19 @@ export function DecisionsView() {
         </Card>
       )}
 
-      {/* Merge Order DAG */}
+      {/* Visual DAG Graph */}
+      {search && <DAGGraphView repo={search} />}
+
+      {/* Merge Order DAG List */}
       {mergeOrder && mergeOrder.totalNodes > 0 && (
         <Card className="border-primary/30 bg-primary/[0.03] backdrop-blur">
           <CardContent className="p-3">
             <div className="flex items-center gap-2 mb-2">
               <GitMerge className="w-4 h-4 text-primary" />
               <span className="text-sm font-medium text-primary">Suggested Merge Order ({mergeOrder.totalNodes} PRs)</span>
+              <Badge variant="secondary" className="font-mono text-[10px] px-1.5 py-0 h-5 gap-1">
+                <Network className="w-3 h-3" /> Graph view above
+              </Badge>
             </div>
             <div className="space-y-1">
               {mergeOrder.orderedPRs.map((item, i) => (
